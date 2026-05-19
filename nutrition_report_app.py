@@ -40,13 +40,13 @@ def get_goal_adjustment(goal):
     }
     return adjustments.get(goal, 0.0)
 
-def calculate_initial_macros(calories, goal, weight_lbs):
+def calculate_initial_macros(calories, goal, current_weight_lbs, goal_weight_lbs):
     if goal == "Fat Loss":
-        protein_g = round(weight_lbs * 1.1, 1)
+        protein_g = round(goal_weight_lbs * 1.1, 1)
     elif goal in ["Muscle Gain", "Reverse Diet"]:
-        protein_g = round(weight_lbs * 0.9, 1)
+        protein_g = round(current_weight_lbs * 0.9, 1)
     else:
-        protein_g = round(weight_lbs * 1.0, 1)
+        protein_g = round(current_weight_lbs * 1.0, 1)
     
     protein_cal = protein_g * 4
     remaining_cal = calories - protein_cal
@@ -170,6 +170,17 @@ with st.form("client_form"):
         ["Fat Loss", "Muscle Gain", "Body Recomposition", "Maintenance", "Reverse Diet"]
     )
     
+    # === IMPROVED: Columns + Sub-label for Fat Loss Intensity ===
+    fat_loss_type = None
+    if primary_goal == "Fat Loss":
+        st.markdown("**Fat Loss Intensity**")
+        fat_loss_type = st.selectbox(
+            "Choose intensity level",
+            ["Low", "Moderate", "Aggressive"],
+            help="Low = more conservative deficit • Moderate = balanced • Aggressive = faster fat loss",
+            label_visibility="collapsed"
+        )
+    
     client_notes = st.text_area(
         "Client Notes",
         placeholder="Dietary modifications, medical needs, training goals, etc.."
@@ -181,22 +192,18 @@ with st.form("client_form"):
 if submitted:
     validation_error = False
 
-    # Fat Loss validation
     if primary_goal == "Fat Loss" and goal_weight_lbs >= weight_lbs:
         st.error("Goal weight must be lower than Current Weight for Fat Loss.")
         validation_error = True
 
-    # Muscle Gain validation
     elif primary_goal == "Muscle Gain" and goal_weight_lbs <= weight_lbs:
         st.error("Goal weight must be higher than Current Weight for Muscle Gain.")
         validation_error = True
 
-    # Reverse Diet validation (NEW)
     elif primary_goal == "Reverse Diet" and goal_weight_lbs <= weight_lbs:
         st.error("Goal weight must be higher than Current Weight for Reverse Diet.")
         validation_error = True
 
-    # Only proceed if no validation errors
     if not validation_error:
         st.session_state['submitted'] = True
         st.session_state['client_name'] = client_name
@@ -208,14 +215,28 @@ if submitted:
         st.session_state['goal_weight_lbs'] = goal_weight_lbs
         st.session_state['activity_level'] = activity_level
         st.session_state['primary_goal'] = primary_goal
+        st.session_state['fat_loss_type'] = fat_loss_type
         st.session_state['client_notes'] = client_notes
 
         bmr = calculate_bmr_mifflin(age, weight_lbs, feet, inches, gender)
         tdee_multiplier = get_tdee_multiplier(activity_level)
         tdee = round(bmr * tdee_multiplier)
-        adjustment = get_goal_adjustment(primary_goal)
-        target_calories = round(tdee * (1 + adjustment))
-        initial_protein, initial_fat, initial_carbs = calculate_initial_macros(target_calories, primary_goal, weight_lbs)
+
+        if primary_goal == "Fat Loss":
+            if fat_loss_type == "Low":
+                target_calories = round(tdee * 0.90)
+            elif fat_loss_type == "Moderate":
+                target_calories = round(tdee * 0.85)
+            else:  # Aggressive
+                target_calories = round(tdee * 0.80)
+            adjustment = -0.15
+        else:
+            adjustment = get_goal_adjustment(primary_goal)
+            target_calories = round(tdee * (1 + adjustment))
+
+        initial_protein, initial_fat, initial_carbs = calculate_initial_macros(
+            target_calories, primary_goal, weight_lbs, goal_weight_lbs
+        )
         timeframe = estimate_timeframe(weight_lbs, goal_weight_lbs, primary_goal)
 
         st.session_state['bmr'] = bmr
@@ -237,6 +258,7 @@ if st.session_state.get('submitted', False):
     weight_lbs = st.session_state['weight_lbs']
     goal_weight_lbs = st.session_state['goal_weight_lbs']
     primary_goal = st.session_state['primary_goal']
+    fat_loss_type = st.session_state.get('fat_loss_type')
     client_notes = st.session_state.get('client_notes', '')
     bmr = st.session_state['bmr']
     tdee = st.session_state['tdee']
@@ -310,26 +332,41 @@ if st.session_state.get('submitted', False):
     
     with st.container():
         st.markdown("### Why These Calories?")
-        st.markdown(f"""
-        We calculated a **BMR** of **{bmr} cal** and estimated **TDEE** at **{tdee} cal**. 
-        For the goal of **{primary_goal}**, we applied a **{abs(int(adjustment*100))}% {"deficit" if adjustment < 0 else "surplus" if adjustment > 0 else "maintenance"}** 
-        to create a sustainable calorie target of **{target_calories} cal** while protecting muscle mass.
-        """)
+        if primary_goal == "Fat Loss" and fat_loss_type:
+            st.markdown(f"""
+            We calculated your **BMR** and estimated your **TDEE**. For your **{fat_loss_type}** Fat Loss goal, 
+            we set your calories at **{fat_loss_type.lower()} intensity** ({'90%' if fat_loss_type == 'Low' else '85%' if fat_loss_type == 'Moderate' else '80%'} of your TDEE). 
+            This creates a controlled deficit while keeping protein high (based on your goal weight) to help protect muscle.
+            """)
+        else:
+            st.markdown(f"""
+            We calculated your **BMR** and estimated your **TDEE**. We then applied a 
+            **{abs(int(adjustment*100))}% {"deficit" if adjustment < 0 else "surplus" if adjustment > 0 else "maintenance"}** 
+            based on your goal of **{primary_goal}**.
+            """)
 
         st.markdown("### Macro Strategy")
         st.markdown(f"""
-        Protein is set at **{protein_g}g** to prioritize muscle retention. 
-        The Fat and Carbohydrate split can be adjusted using the slider above while keeping total daily calories constant.
+        **Protein** is prioritized to help preserve muscle and support recovery. For all Fat Loss options, 
+        we calculate protein using your **goal weight × 1.1g**.
+        
+        After setting protein, the remaining calories are split between fat and carbohydrates. 
+        Use the slider above to adjust the balance based on your preferences and training performance.
         """)
 
-        if primary_goal == "Fat Loss":
-            st.info("A moderate deficit combined with higher protein helps create fat loss while minimizing muscle loss and metabolic adaptation.")
+        if primary_goal == "Fat Loss" and fat_loss_type:
+            if fat_loss_type == "Low":
+                st.info("This is a more conservative approach. It creates a smaller deficit, which is often easier to sustain long-term.")
+            elif fat_loss_type == "Moderate":
+                st.info("A balanced approach that provides good progress while remaining sustainable for most people.")
+            else:
+                st.info("This is a more aggressive approach. It creates a larger deficit and works best if you tolerate faster fat loss well.")
         elif primary_goal == "Muscle Gain":
-            st.info("A controlled surplus provides extra energy for muscle repair and growth. The slider allows personalization of fat versus carbohydrate intake based on preference.")
+            st.info("We use a controlled surplus to support muscle growth while minimizing excessive fat gain.")
         elif primary_goal == "Reverse Diet":
-            st.info("Gradually increasing calories while adjusting the fat-to-carb ratio helps restore metabolic rate and hormone function after a dieting phase.")
+            st.info("Gradually increasing calories helps restore metabolic rate and energy after a period of dieting.")
         else:
-            st.info("Maintenance calories allow focus on performance, recovery, and consistency with flexible macro distribution.")
+            st.info("Maintenance calories support performance and long-term consistency without pushing for weight change.")
 
     st.markdown("""
     <div class="disclaimer">
@@ -383,6 +420,9 @@ if st.session_state.get('submitted', False):
         story.append(Paragraph(f"Current Weight: {weight_lbs} lbs → Goal Weight: {goal_weight_lbs} lbs", normal_style))
         story.append(Paragraph(f"<b>Primary Goal:</b> {primary_goal}", normal_style))
         
+        if fat_loss_type:
+            story.append(Paragraph(f"<b>Fat Loss Type:</b> {fat_loss_type}", normal_style))
+        
         if client_notes:
             story.append(Paragraph(f"<b>Client Notes:</b> {client_notes}", normal_style))
         
@@ -397,11 +437,20 @@ if st.session_state.get('submitted', False):
         
         story.append(Spacer(1, 8))
         story.append(Paragraph("<b>Why These Recommendations?</b>", heading_style))
-        story.append(Paragraph(
-            f"Calculated using Mifflin-St Jeor BMR and activity-based TDEE. Applied a {abs(int(adjustment*100))}% "
-            f"{'deficit' if adjustment < 0 else 'surplus' if adjustment > 0 else 'maintenance'} for the goal of {primary_goal}. "
-            "Fat and carbohydrate distribution was personalized using the interactive balance slider while maintaining total daily calories.", 
-            normal_style))
+        
+        if primary_goal == "Fat Loss" and fat_loss_type:
+            why_text = f"""
+            We calculated your BMR and TDEE, then applied a <b>{fat_loss_type}</b> Fat Loss approach. 
+            Your calories were set at <b>{'90%' if fat_loss_type == 'Low' else '85%' if fat_loss_type == 'Moderate' else '80%'}</b> of your TDEE. 
+            Protein was calculated from your goal weight (× 1.1g) to help protect muscle during the deficit.
+            """
+        else:
+            why_text = f"""
+            We calculated your BMR and TDEE, then adjusted calories based on your goal of {primary_goal}. 
+            Protein was prioritized to support muscle retention and recovery.
+            """
+        
+        story.append(Paragraph(why_text, normal_style))
         
         story.append(Spacer(1, 14))
         story.append(HRFlowable(width="100%", thickness=1, color=colors.grey))
@@ -432,8 +481,8 @@ Here is your customized nutrition plan:
 **Macros:** Protein {protein_g}g | Fat {fat_g}g | Carbs {carb_g}g
 
 **Why these numbers?**
-We calculated your BMR and TDEE, then applied a {abs(int(adjustment*100))}% {"deficit" if adjustment < 0 else "surplus" if adjustment > 0 else "maintenance"} based on your goal of {primary_goal}. 
-Protein is prioritized for muscle retention. Fat and carbs were adjusted using a balance slider while keeping total calories the same.
+We calculated your BMR and TDEE. For your {fat_loss_type.lower() if fat_loss_type else ''} fat loss goal, 
+we set calories at { '90%' if fat_loss_type == 'Low' else '85%' if fat_loss_type == 'Moderate' else '80%' if fat_loss_type else ''} of your TDEE.
 
 Please let me know if you have any questions!
 
