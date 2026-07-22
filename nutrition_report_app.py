@@ -50,12 +50,60 @@ st.set_page_config(
 st.markdown(f"""
 <style>
     /* ---------- Base surfaces: white-dominant ---------- */
-    .stApp {{ background: {WHITE}; }}
+    .stApp {{ background: {WHITE}; color: {INK}; }}
     .block-container {{ padding-top: 2.0rem; max-width: 920px; }}
 
     section[data-testid="stSidebar"] {{
         background: {WHITE};
         border-right: 1px solid {BLUE_LINE};
+    }}
+
+    /* ---------- Force readable text everywhere ----------
+       Streamlit defaults to a light-on-dark palette when the viewer's OS is in
+       dark mode. .streamlit/config.toml pins the light theme; these rules are a
+       fallback so labels can never render white-on-white if that file is
+       missing. */
+    .stApp, .stApp p, .stApp li, .stApp label, .stApp span,
+    .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6,
+    .stMarkdown, .stMarkdown p, .stMarkdown li,
+    div[data-testid="stWidgetLabel"] p,
+    div[data-testid="stWidgetLabel"] label,
+    section[data-testid="stSidebar"] p,
+    section[data-testid="stSidebar"] label,
+    section[data-testid="stSidebar"] span,
+    section[data-testid="stSidebar"] h1, section[data-testid="stSidebar"] h2,
+    section[data-testid="stSidebar"] h3 {{
+        color: {INK};
+    }}
+    /* Inputs and dropdown menus */
+    input, textarea, div[data-baseweb="select"] div,
+    div[data-baseweb="popover"] li, div[data-baseweb="popover"] div {{
+        color: {INK} !important;
+    }}
+    input::placeholder, textarea::placeholder {{
+        color: #94A9B4 !important; opacity: 1;
+    }}
+    /* Captions and help text — softer, but still 6.3:1 on white */
+    .stCaption, .stCaption p,
+    div[data-testid="stCaptionContainer"],
+    div[data-testid="stCaptionContainer"] p,
+    small, .stApp small {{
+        color: {INK_SOFT} !important;
+    }}
+    /* Radio / checkbox / file uploader labels */
+    div[data-testid="stRadio"] label, div[data-testid="stRadio"] label p,
+    div[data-testid="stCheckbox"] label, div[data-testid="stCheckbox"] label p,
+    div[data-testid="stFileUploader"] label,
+    div[data-testid="stFileUploaderDropzone"] span,
+    div[data-testid="stFileUploaderDropzone"] div {{
+        color: {INK} !important;
+    }}
+    /* Expander header + slider readouts */
+    div[data-testid="stExpander"] summary,
+    div[data-testid="stExpander"] summary p,
+    .stSlider [data-testid="stTickBar"] div,
+    .stSlider div[data-baseweb="slider"] div {{
+        color: {INK} !important;
     }}
 
     /* ---------- Typography ---------- */
@@ -111,13 +159,20 @@ st.markdown(f"""
         font-size: 0.76rem; font-weight: 700; text-transform: uppercase;
         letter-spacing: 0.05em; color: {INK_SOFT};
     }}
-    /* Highlighted primary metric */
-    .metric-accent div[data-testid="stMetric"] {{
-        background: {BRAND_BLUE}; border-color: {BRAND_BLUE};
+    /* Emphasis for the Daily Target card (3rd metric in the energy row).
+       Brand blue on white is only 2.48:1, so blue is used as a border and
+       tint rather than a text background — numbers stay dark and legible. */
+    #energy-row + div[data-testid="stHorizontalBlock"]
+        > div[data-testid="stColumn"]:nth-child(3) div[data-testid="stMetric"] {{
+        background: {BLUE_TINT};
+        border: 2.5px solid {BRAND_BLUE};
     }}
-    .metric-accent div[data-testid="stMetricValue"],
-    .metric-accent div[data-testid="stMetricLabel"] p,
-    .metric-accent div[data-testid="stMetricDelta"] {{ color: {WHITE} !important; }}
+    div[data-testid="stMetricDelta"] svg {{ display: none; }}
+    div[data-testid="stMetricDelta"] {{
+        background: transparent !important;
+        color: {INK_SOFT} !important;
+        font-weight: 600;
+    }}
 
     /* ---------- Inputs ---------- */
     div[data-baseweb="input"] > div, div[data-baseweb="select"] > div,
@@ -137,9 +192,14 @@ st.markdown(f"""
     .bbc-card {{
         background: {BLUE_TINT}; border: 1px solid {BLUE_LINE};
         border-left: 4px solid {BRAND_BLUE}; border-radius: 8px;
-        padding: 0.8rem 1rem; color: {INK}; font-size: 0.93rem;
+        padding: 0.8rem 1rem; font-size: 0.93rem;
         margin: 0.5rem 0 0.2rem 0;
     }}
+    .bbc-card, .bbc-card p, .bbc-card strong {{ color: {INK} !important; }}
+    .disclaimer, .disclaimer strong {{ color: {INK_SOFT} !important; }}
+    .bbc-title {{ color: {INK} !important; }}
+    .bbc-sub {{ color: {INK_SOFT} !important; }}
+    .section-header {{ color: {INK} !important; }}
     .macro-bar {{
         display: flex; width: 100%; height: 34px; border-radius: 7px;
         overflow: hidden; margin: 0.5rem 0 0.35rem 0;
@@ -345,7 +405,8 @@ store_profile(profile)
 #  RESULTS
 # ============================================================
 
-st.markdown('<div class="section-header">Daily Energy Targets</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-header">Daily Energy Targets</div>'
+            '<div id="energy-row"></div>', unsafe_allow_html=True)
 
 balance = st.session_state.get("fat_carb_slider", 50)
 plan = build_plan(profile, balance)
@@ -354,14 +415,12 @@ e1, e2, e3 = st.columns(3)
 e1.metric("BMR", f"{plan.bmr:,.0f} cal", help="Mifflin-St Jeor estimate at rest.")
 e2.metric("Estimated TDEE", f"{plan.tdee:,} cal", help="BMR × activity multiplier.")
 with e3:
-    st.markdown('<div class="metric-accent">', unsafe_allow_html=True)
     st.metric(
         "Daily Target", f"{plan.target_calories:,} cal",
         delta=(f"{plan.daily_calorie_delta:+,} vs TDEE"
                if plan.daily_calorie_delta else "At maintenance"),
         delta_color="off",
     )
-    st.markdown("</div>", unsafe_allow_html=True)
 
 if plan.daily_calorie_delta:
     word = "deficit" if plan.daily_calorie_delta < 0 else "surplus"
