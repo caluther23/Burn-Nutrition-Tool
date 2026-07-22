@@ -25,11 +25,11 @@ from reportlab.lib.utils import ImageReader
 from nutrition_core import ClientProfile, NutritionPlan
 
 # ---- Burn Boot Camp palette ----
-BRAND_BLUE = colors.HexColor("#00AEEF")
-DEEP_NAVY = colors.HexColor("#0B2545")
-LIGHT_GREY = colors.HexColor("#F2F5F8")
-MID_GREY = colors.HexColor("#6B7280")
-BORDER_GREY = colors.HexColor("#D9E1E8")
+BRAND_BLUE = colors.HexColor("#00B2E2")
+DEEP_NAVY = colors.HexColor("#0A3D55")
+LIGHT_GREY = colors.HexColor("#F4FBFE")
+MID_GREY = colors.HexColor("#4A6472")
+BORDER_GREY = colors.HexColor("#BEE9F7")
 
 LOGO_PATH = Path(__file__).resolve().parent / "burn_boot_camp_logo.png"
 LOGO_TARGET_WIDTH = 2.3 * inch
@@ -130,7 +130,7 @@ def _macro_bar(plan: NutritionPlan) -> Optional[Table]:
         return None
 
     full_width = 6.9 * inch
-    order = [("Protein", DEEP_NAVY), ("Fat", BRAND_BLUE), ("Carbs", colors.HexColor("#9BD9F2"))]
+    order = [("Protein", DEEP_NAVY), ("Fat", BRAND_BLUE), ("Carbs", colors.HexColor("#B5E7F7"))]
 
     widths, labels, style = [], [], []
     for idx, (name, color) in enumerate(order):
@@ -138,7 +138,7 @@ def _macro_bar(plan: NutritionPlan) -> Optional[Table]:
         if pct <= 0:
             continue
         widths.append(full_width * pct / 100.0)
-        text_hex = "#FFFFFF" if name != "Carbs" else "#0B2545"
+        text_hex = "#FFFFFF" if name != "Carbs" else "#0A3D55"
         labels.append(Paragraph(
             f'<font color="{text_hex}" size="8"><b>{name} {pct:.0f}%</b></font>',
             ParagraphStyle("bar", alignment=TA_CENTER, fontSize=8, leading=10),
