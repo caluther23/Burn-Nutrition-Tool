@@ -180,7 +180,16 @@ pre = st.session_state.get("prefill", {})
 
 
 def _pv(key, default):
-    return pre.get(key, default)
+    """Prefill value, falling back to the default when missing or null."""
+    value = pre.get(key, default)
+    return default if value is None else value
+
+
+def _safe_index(options: list, value, fallback):
+    """Index of value in options; falls back if the value is missing or invalid."""
+    if value in options:
+        return options.index(value)
+    return options.index(fallback)
 
 
 st.markdown('<div class="section-header">Client Information</div>', unsafe_allow_html=True)
@@ -193,7 +202,7 @@ with st.form("client_form"):
     with col1:
         age = st.number_input("Age", 16, 90, int(_pv("age", 30)), 1)
         gender = st.selectbox("Gender", GENDERS,
-                              index=GENDERS.index(_pv("gender", "Male")))
+                              index=_safe_index(GENDERS, _pv("gender", "Male"), "Male"))
         st.markdown("**Height**")
         h1, h2 = st.columns(2)
         with h1:
@@ -210,19 +219,21 @@ with st.form("client_form"):
         activity_options = list(ACTIVITY_MULTIPLIERS.keys())
         activity_level = st.selectbox(
             "Activity Level", activity_options,
-            index=activity_options.index(
-                _pv("activity_level", activity_options[2])
-            ) if _pv("activity_level", activity_options[2]) in activity_options else 2,
+            index=_safe_index(activity_options,
+                              _pv("activity_level", activity_options[2]),
+                              activity_options[2]),
         )
 
     g1, g2 = st.columns(2)
     with g1:
-        primary_goal = st.selectbox("Primary Goal", GOALS,
-                                    index=GOALS.index(_pv("primary_goal", "Fat Loss")))
+        primary_goal = st.selectbox(
+            "Primary Goal", GOALS,
+            index=_safe_index(GOALS, _pv("primary_goal", "Fat Loss"), "Fat Loss"))
     with g2:
         fat_loss_type = st.selectbox(
             "Fat Loss Intensity", FAT_LOSS_INTENSITIES,
-            index=FAT_LOSS_INTENSITIES.index(_pv("fat_loss_type") or "Moderate"),
+            index=_safe_index(FAT_LOSS_INTENSITIES,
+                              _pv("fat_loss_type", "Moderate"), "Moderate"),
             help="Low = 90% of TDEE  •  Moderate = 85%  •  Aggressive = 80%. "
                  "Only applies when Primary Goal is Fat Loss.",
         )
