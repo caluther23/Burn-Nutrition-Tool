@@ -1,0 +1,16 @@
+# Burn Boot Camp — Client Nutrition Report
+# Pins the light theme so the app never inherits a viewer's OS dark mode.
+
+[theme]
+base = "light"
+primaryColor = "#00B2E2"              # brand blue (sampled from the logo)
+backgroundColor = "#FFFFFF"           # main surface
+secondaryBackgroundColor = "#F4FBFE"  # sidebar, inputs, code blocks
+textColor = "#0A3D55"                 # ink — 11.6:1 contrast on white
+font = "sans serif"
+
+[client]
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false
