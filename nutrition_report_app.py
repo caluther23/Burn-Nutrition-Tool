@@ -1,515 +1,466 @@
-import streamlit as st
-from reportlab.lib.pagesizes import letter
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, HRFlowable, Table, TableStyle
-from reportlab.lib import colors
-from reportlab.lib.enums import TA_CENTER, TA_LEFT
-import io
+"""
+Burn Boot Camp — Client Nutrition Report
+=======================================
+Streamlit front end.
+
+Run:  streamlit run nutrition_report_app.py
+
+Layers:
+    nutrition_core.py  -> formulas & data models (no UI)
+    pdf_report.py      -> branded PDF output
+    this file          -> UI only
+"""
+
+from __future__ import annotations
+
 import datetime
-import os
+import json
+from pathlib import Path
 
-# ====================== HELPER FUNCTIONS ======================
-def calculate_bmr_mifflin(age, weight_lbs, height_feet, height_inches, gender):
-    weight_kg = weight_lbs / 2.20462
-    height_cm = (height_feet * 30.48) + (height_inches * 2.54)
-    
-    if gender == "Male":
-        bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5
-    else:
-        bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) - 161
-    return round(bmr, 1)
+import streamlit as st
 
-def get_tdee_multiplier(activity):
-    multipliers = {
-        "Sedentary (little to no exercise)": 1.2,
-        "Lightly Active (light exercise 1-3 days/week)": 1.375,
-        "Moderately Active (moderate exercise 3-5 days/week)": 1.55,
-        "Very Active (hard exercise 6-7 days/week)": 1.725,
-        "Super Active (very hard exercise + physical job)": 1.9
-    }
-    return multipliers.get(activity, 1.55)
+from nutrition_core import (
+    ACTIVITY_MULTIPLIERS, FAT_LOSS_INTENSITIES, GENDERS, GOALS,
+    ClientProfile, build_plan, fat_pct_from_slider, validate_profile,
+)
+from pdf_report import build_why_text, generate_pdf
 
-def get_goal_adjustment(goal):
-    adjustments = {
-        "Fat Loss": -0.20,
-        "Muscle Gain": 0.10,
-        "Body Recomposition": -0.05,
-        "Maintenance": 0.0,
-        "Reverse Diet": 0.05
-    }
-    return adjustments.get(goal, 0.0)
+APP_DIR = Path(__file__).resolve().parent
+LOGO_PATH = APP_DIR / "burn_boot_camp_logo.png"
+BASECAMP_URL = "https://3.basecamp.com/5658951/buckets/39259287/message_boards/7850300503"
 
-def calculate_initial_macros(calories, goal, current_weight_lbs, goal_weight_lbs):
-    if goal == "Fat Loss":
-        protein_g = round(goal_weight_lbs * 1.1, 1)
-    elif goal in ["Muscle Gain", "Reverse Diet"]:
-        protein_g = round(current_weight_lbs * 0.9, 1)
-    else:
-        protein_g = round(current_weight_lbs * 1.0, 1)
-    
-    protein_cal = protein_g * 4
-    remaining_cal = calories - protein_cal
-    
-    fat_pct = 0.30
-    fat_g = round((calories * fat_pct) / 9, 1)
-    fat_cal = fat_g * 9
-    carb_g = round((remaining_cal - fat_cal) / 4, 1)
-    
-    return round(protein_g), round(fat_g), round(carb_g)
+BRAND_BLUE = "#00AEEF"
+DEEP_NAVY = "#0B2545"
 
-def estimate_timeframe(current_weight, goal_weight, goal):
-    weight_diff = abs(current_weight - goal_weight)
-    
-    if goal == "Fat Loss":
-        weeks = weight_diff / 0.75
-    elif goal == "Muscle Gain":
-        weeks = weight_diff / 0.4
-    else:
-        return None
-    
-    months = int(weeks // 4.345)
-    days = int((weeks % 4.345) * 7)
-    return months, days, round(weeks, 1)
+# ============================================================
+#  PAGE CONFIG
+# ============================================================
 
-# ====================== PAGE CONFIG & THEMING ======================
 st.set_page_config(
-    page_title="Client Nutrition Report",
+    page_title="Client Nutrition Report | Burn Boot Camp",
     page_icon="💪",
     layout="centered",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded",
 )
 
-# Custom CSS
-st.markdown("""
+st.markdown(f"""
 <style>
-    .main-header {
-        font-size: 2.6rem;
-        font-weight: 700;
-        color: #0077B6;
-        text-align: center;
-        margin-bottom: 0.3rem;
-    }
-    .sub-header {
-        font-size: 1.1rem;
-        color: #333333;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    .section-header {
-        font-size: 1.35rem;
-        font-weight: 600;
-        color: #0077B6;
+    .block-container {{ padding-top: 2.2rem; max-width: 900px; }}
+
+    .bbc-title {{
+        font-size: 2.4rem; font-weight: 800; color: {DEEP_NAVY};
+        letter-spacing: -0.02em; margin: 0.2rem 0 0.1rem 0; line-height: 1.1;
+    }}
+    .bbc-sub {{
+        font-size: 1.0rem; color: #5A6B7B; margin-bottom: 1.2rem;
+    }}
+    .section-header {{
+        font-size: 1.2rem; font-weight: 700; color: {DEEP_NAVY};
+        margin-top: 1.8rem; margin-bottom: 0.7rem;
+        border-bottom: 3px solid {BRAND_BLUE}; padding-bottom: 0.35rem;
+    }}
+    .stButton>button, .stDownloadButton>button, .stLinkButton>a {{
+        border-radius: 8px; font-weight: 600; border: none;
+    }}
+    div[data-testid="stForm"] .stButton>button {{
+        background-color: {BRAND_BLUE}; color: white; padding: 0.6rem 1.5rem;
+    }}
+    div[data-testid="stForm"] .stButton>button:hover {{
+        background-color: #0090c7; color: white;
+    }}
+    div[data-testid="stMetric"] {{
+        background: #F5F9FC; border: 1px solid #DCE7EF;
+        border-radius: 10px; padding: 0.85rem 0.9rem;
+    }}
+    div[data-testid="stMetricValue"] {{
+        font-size: 1.55rem; color: {DEEP_NAVY};
+    }}
+    div[data-testid="stMetricLabel"] p {{
+        font-size: 0.78rem; font-weight: 600;
+        text-transform: uppercase; letter-spacing: 0.04em; color: #64748B;
+    }}
+    .macro-bar {{
+        display: flex; width: 100%; height: 34px; border-radius: 7px;
+        overflow: hidden; margin: 0.4rem 0 0.3rem 0;
+        font-size: 0.78rem; font-weight: 700;
+    }}
+    .macro-seg {{
+        display: flex; align-items: center; justify-content: center;
+        color: #fff; white-space: nowrap; overflow: hidden;
+    }}
+    .disclaimer {{
+        font-size: 0.83rem; color: #6B7280; font-style: italic;
+        border-left: 3px solid #DCE7EF; padding: 0.5rem 0 0.5rem 0.85rem;
         margin-top: 1.5rem;
-        margin-bottom: 0.8rem;
-        border-bottom: 2px solid #0077B6;
-        padding-bottom: 0.3rem;
-    }
-    .stButton>button {
-        background-color: #0077B6;
-        color: white;
-        font-weight: 600;
-        border-radius: 8px;
-        padding: 0.6rem 1.5rem;
-        border: none;
-    }
-    .stButton>button:hover {
-        background-color: #005f8a;
-        color: white;
-    }
-    .disclaimer {
-        font-size: 0.85rem;
-        color: #666666;
-        font-style: italic;
-        margin-top: 2rem;
-    }
+    }}
+    @media print {{
+        [data-testid="stSidebar"], [data-testid="stToolbar"],
+        .stButton, .stDownloadButton, .stLinkButton {{ display: none !important; }}
+        .block-container {{ max-width: 100% !important; padding-top: 0 !important; }}
+    }}
 </style>
 """, unsafe_allow_html=True)
 
-# ====================== HEADER ======================
-st.markdown('<h1 class="main-header">Client Nutrition Report</h1>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">Professional Client Nutrition Planning Tool</p>', unsafe_allow_html=True)
-st.markdown("---")
 
-# ====================== INPUT FORM ======================
-st.markdown('<h2 class="section-header">Client Information</h2>', unsafe_allow_html=True)
+# ============================================================
+#  STATE HELPERS
+# ============================================================
+
+def get_profile() -> ClientProfile | None:
+    data = st.session_state.get("profile_data")
+    return ClientProfile.from_dict(data) if data else None
+
+
+def store_profile(profile: ClientProfile) -> None:
+    st.session_state["profile_data"] = profile.to_dict()
+
+
+def clear_all() -> None:
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
+
+
+# ============================================================
+#  SIDEBAR
+# ============================================================
+
+with st.sidebar:
+    if LOGO_PATH.exists():
+        st.image(str(LOGO_PATH), use_container_width=True)
+    st.markdown("### Report Settings")
+
+    trainer_name = st.text_input(
+        "Trainer name", value=st.session_state.get("trainer_name", ""),
+        placeholder="Appears on the PDF", key="trainer_name",
+    )
+    include_guide = st.checkbox(
+        "Include member education page in PDF", value=True,
+        help="Adds a second page explaining BMR, TDEE, and each macro in plain English.",
+    )
+
+    st.divider()
+    st.markdown("### Load a Saved Client")
+    uploaded = st.file_uploader("Client profile (.json)", type=["json"],
+                                label_visibility="collapsed")
+    if uploaded is not None:
+        try:
+            loaded = ClientProfile.from_dict(json.load(uploaded))
+            store_profile(loaded)
+            st.session_state["prefill"] = loaded.to_dict()
+            st.success(f"Loaded {loaded.client_name or 'client'}.")
+        except (json.JSONDecodeError, TypeError, ValueError) as exc:
+            st.error(f"Could not read that file: {exc}")
+
+    st.divider()
+    st.caption(
+        "Reports are generated in your browser session. Nothing is stored on a server. "
+        "Refreshing the page clears all client data."
+    )
+
+
+# ============================================================
+#  HEADER
+# ============================================================
+
+head_l, head_r = st.columns([3, 1], vertical_alignment="center")
+with head_l:
+    st.markdown('<div class="bbc-title">Client Nutrition Report</div>', unsafe_allow_html=True)
+    st.markdown('<div class="bbc-sub">Evidence-based calorie and macronutrient planning</div>',
+                unsafe_allow_html=True)
+with head_r:
+    if LOGO_PATH.exists():
+        st.image(str(LOGO_PATH), use_container_width=True)
+
+
+# ============================================================
+#  INPUT FORM
+# ============================================================
+
+pre = st.session_state.get("prefill", {})
+
+
+def _pv(key, default):
+    return pre.get(key, default)
+
+
+st.markdown('<div class="section-header">Client Information</div>', unsafe_allow_html=True)
 
 with st.form("client_form"):
-    client_name = st.text_input("Client Name (First & Last)", placeholder="e.g., John Smith")
+    client_name = st.text_input("Client Name (First & Last)",
+                                value=_pv("client_name", ""), placeholder="e.g., John Smith")
 
     col1, col2 = st.columns(2)
-    
     with col1:
-        age = st.number_input("Age", min_value=16, max_value=90, value=30, step=1)
-        gender = st.selectbox("Gender", ["Male", "Female"])
-        
-        st.write("**Height**")
-        height_col1, height_col2 = st.columns(2)
-        with height_col1:
-            feet = st.number_input("Feet", min_value=4, max_value=7, value=5, step=1)
-        with height_col2:
-            inches = st.number_input("Inches", min_value=0, max_value=11, value=8, step=1)
-    
+        age = st.number_input("Age", 16, 90, int(_pv("age", 30)), 1)
+        gender = st.selectbox("Gender", GENDERS,
+                              index=GENDERS.index(_pv("gender", "Male")))
+        st.markdown("**Height**")
+        h1, h2 = st.columns(2)
+        with h1:
+            feet = st.number_input("Feet", 4, 7, int(_pv("feet", 5)), 1)
+        with h2:
+            inches = st.number_input("Inches", 0, 11, int(_pv("inches", 8)), 1)
+
     with col2:
-        weight_lbs = st.number_input("Current Weight (lbs)", min_value=80.0, max_value=500.0, value=180.0, step=0.1, format="%.1f")
-        goal_weight_lbs = st.number_input("Goal Weight (lbs)", min_value=80.0, max_value=500.0, value=160.0, step=0.1, format="%.1f")
-        
+        weight_lbs = st.number_input("Current Weight (lbs)", 80.0, 500.0,
+                                     float(_pv("weight_lbs", 180.0)), 0.1, format="%.1f")
+        goal_weight_lbs = st.number_input("Goal Weight (lbs)", 80.0, 500.0,
+                                          float(_pv("goal_weight_lbs", 160.0)), 0.1,
+                                          format="%.1f")
+        activity_options = list(ACTIVITY_MULTIPLIERS.keys())
         activity_level = st.selectbox(
-            "Activity Level",
-            [
-                "Sedentary (little to no exercise)",
-                "Lightly Active (light exercise 1-3 days/week)",
-                "Moderately Active (moderate exercise 3-5 days/week)",
-                "Very Active (hard exercise 6-7 days/week)",
-                "Super Active (very hard exercise + physical job)"
-            ]
+            "Activity Level", activity_options,
+            index=activity_options.index(
+                _pv("activity_level", activity_options[2])
+            ) if _pv("activity_level", activity_options[2]) in activity_options else 2,
         )
-    
-    primary_goal = st.selectbox(
-        "Primary Goal",
-        ["Fat Loss", "Muscle Gain", "Body Recomposition", "Maintenance", "Reverse Diet"]
-    )
-    
-    # === IMPROVED: Columns + Sub-label for Fat Loss Intensity ===
-    fat_loss_type = None
-    if primary_goal == "Fat Loss":
-        st.markdown("**Fat Loss Intensity**")
+
+    g1, g2 = st.columns(2)
+    with g1:
+        primary_goal = st.selectbox("Primary Goal", GOALS,
+                                    index=GOALS.index(_pv("primary_goal", "Fat Loss")))
+    with g2:
         fat_loss_type = st.selectbox(
-            "Choose intensity level",
-            ["Low", "Moderate", "Aggressive"],
-            help="Low = more conservative deficit • Moderate = balanced • Aggressive = faster fat loss",
-            label_visibility="collapsed"
+            "Fat Loss Intensity", FAT_LOSS_INTENSITIES,
+            index=FAT_LOSS_INTENSITIES.index(_pv("fat_loss_type") or "Moderate"),
+            help="Low = 90% of TDEE  •  Moderate = 85%  •  Aggressive = 80%. "
+                 "Only applies when Primary Goal is Fat Loss.",
         )
-    
+
     client_notes = st.text_area(
-        "Client Notes",
-        placeholder="Dietary modifications, medical needs, training goals, etc.."
+        "Trainer Notes",
+        value=_pv("client_notes", ""),
+        placeholder="Dietary modifications, medical considerations, training schedule, "
+                    "food preferences, travel weeks...",
     )
-    
-    submitted = st.form_submit_button("Generate Professional Report", use_container_width=True)
 
-# ====================== VALIDATION + SESSION STATE ======================
+    submitted = st.form_submit_button("Generate Report", use_container_width=True)
+
 if submitted:
-    validation_error = False
+    profile = ClientProfile(
+        client_name=client_name.strip(), age=age, gender=gender,
+        feet=feet, inches=inches, weight_lbs=weight_lbs,
+        goal_weight_lbs=goal_weight_lbs, activity_level=activity_level,
+        primary_goal=primary_goal,
+        fat_loss_type=fat_loss_type if primary_goal == "Fat Loss" else None,
+        client_notes=client_notes.strip(),
+    )
+    errors = validate_profile(profile)
+    if errors:
+        for err in errors:
+            st.error(err)
+    else:
+        store_profile(profile)
+        st.session_state.pop("prefill", None)
 
-    if primary_goal == "Fat Loss" and goal_weight_lbs >= weight_lbs:
-        st.error("Goal weight must be lower than Current Weight for Fat Loss.")
-        validation_error = True
 
-    elif primary_goal == "Muscle Gain" and goal_weight_lbs <= weight_lbs:
-        st.error("Goal weight must be higher than Current Weight for Muscle Gain.")
-        validation_error = True
+# ============================================================
+#  RESULTS
+# ============================================================
 
-    elif primary_goal == "Reverse Diet" and goal_weight_lbs <= weight_lbs:
-        st.error("Goal weight must be higher than Current Weight for Reverse Diet.")
-        validation_error = True
+profile = get_profile()
 
-    if not validation_error:
-        st.session_state['submitted'] = True
-        st.session_state['client_name'] = client_name
-        st.session_state['age'] = age
-        st.session_state['gender'] = gender
-        st.session_state['feet'] = feet
-        st.session_state['inches'] = inches
-        st.session_state['weight_lbs'] = weight_lbs
-        st.session_state['goal_weight_lbs'] = goal_weight_lbs
-        st.session_state['activity_level'] = activity_level
-        st.session_state['primary_goal'] = primary_goal
-        st.session_state['fat_loss_type'] = fat_loss_type
-        st.session_state['client_notes'] = client_notes
+if profile:
+    st.markdown('<div class="section-header">Daily Energy Targets</div>',
+                unsafe_allow_html=True)
 
-        bmr = calculate_bmr_mifflin(age, weight_lbs, feet, inches, gender)
-        tdee_multiplier = get_tdee_multiplier(activity_level)
-        tdee = round(bmr * tdee_multiplier)
+    balance = st.session_state.get("fat_carb_slider", 50)
+    plan = build_plan(profile, balance)
 
-        if primary_goal == "Fat Loss":
-            if fat_loss_type == "Low":
-                target_calories = round(tdee * 0.90)
-            elif fat_loss_type == "Moderate":
-                target_calories = round(tdee * 0.85)
-            else:  # Aggressive
-                target_calories = round(tdee * 0.80)
-            adjustment = -0.15
-        else:
-            adjustment = get_goal_adjustment(primary_goal)
-            target_calories = round(tdee * (1 + adjustment))
-
-        initial_protein, initial_fat, initial_carbs = calculate_initial_macros(
-            target_calories, primary_goal, weight_lbs, goal_weight_lbs
-        )
-        timeframe = estimate_timeframe(weight_lbs, goal_weight_lbs, primary_goal)
-
-        st.session_state['bmr'] = bmr
-        st.session_state['tdee'] = tdee
-        st.session_state['target_calories'] = target_calories
-        st.session_state['initial_protein'] = initial_protein
-        st.session_state['initial_fat'] = initial_fat
-        st.session_state['initial_carbs'] = initial_carbs
-        st.session_state['timeframe'] = timeframe
-        st.session_state['adjustment'] = adjustment
-
-# ====================== DISPLAY RESULTS ======================
-if st.session_state.get('submitted', False):
-    client_name = st.session_state['client_name']
-    age = st.session_state['age']
-    gender = st.session_state['gender']
-    feet = st.session_state['feet']
-    inches = st.session_state['inches']
-    weight_lbs = st.session_state['weight_lbs']
-    goal_weight_lbs = st.session_state['goal_weight_lbs']
-    primary_goal = st.session_state['primary_goal']
-    fat_loss_type = st.session_state.get('fat_loss_type')
-    client_notes = st.session_state.get('client_notes', '')
-    bmr = st.session_state['bmr']
-    tdee = st.session_state['tdee']
-    target_calories = st.session_state['target_calories']
-    initial_protein = st.session_state['initial_protein']
-    initial_fat = st.session_state['initial_fat']
-    initial_carbs = st.session_state['initial_carbs']
-    timeframe = st.session_state['timeframe']
-    adjustment = st.session_state['adjustment']
-
-    st.markdown("---")
-    st.markdown('<h2 class="section-header">Calculations</h2>', unsafe_allow_html=True)
-    
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.metric("BMR", f"{bmr} cal")
-    with col2:
-        st.metric("Estimated TDEE", f"{tdee} cal")
-    with col3:
-        st.metric("Recommended Calories", f"{target_calories} cal")
-
-    # ====================== FAT/CARB SLIDER ======================
-    st.markdown("**Adjust Fat vs Carbs Balance**")
-    st.caption("Move toward **Fat** = Higher Fat / Lower Carbs | Move toward **Carbs** = Lower Fat / Higher Carbs")
-
-    col_fat, col_slider, col_carbs = st.columns([1, 6, 1])
-    with col_fat:
-        st.markdown("**Fat**")
-    with col_slider:
-        fat_carb_balance = st.slider(
-            "Fat / Carb Balance",
-            min_value=0,
-            max_value=100,
-            value=50,
-            step=5,
-            key="fat_carb_slider",
-            label_visibility="collapsed"
-        )
-    with col_carbs:
-        st.markdown("**Carbs**")
-
-    protein_g = initial_protein
-    protein_cal = protein_g * 4
-    remaining_cal = target_calories - protein_cal
-
-    fat_pct = 0.40 - (fat_carb_balance / 100) * 0.15
-    fat_g = round((target_calories * fat_pct) / 9, 1)
-    fat_cal = fat_g * 9
-    carb_g = round((remaining_cal - fat_cal) / 4, 1)
-
-    st.markdown("**Final Macro Targets**")
-    m1, m2, m3 = st.columns(3)
-    with m1:
-        st.metric("Protein", f"{protein_g}g")
-    with m2:
-        st.metric("Fat", f"{fat_g}g")
-    with m3:
-        st.metric("Carbs", f"{carb_g}g")
-
-    if primary_goal in ["Fat Loss", "Muscle Gain"]:
-        st.markdown("**Goal Progress Estimate**")
-        tf_col1, tf_col2 = st.columns(2)
-        with tf_col1:
-            st.metric("Goal Weight", f"{goal_weight_lbs} lbs")
-        with tf_col2:
-            if timeframe:
-                st.metric("Estimated Timeframe", f"{timeframe[0]} months, {timeframe[1]} days")
-
-    # ====================== RECOMMENDATIONS ======================
-    st.markdown('<h2 class="section-header">Professional Recommendations & Reasoning</h2>', unsafe_allow_html=True)
-    
-    with st.container():
-        st.markdown("### Why These Calories?")
-        if primary_goal == "Fat Loss" and fat_loss_type:
-            st.markdown(f"""
-            We calculated your **BMR** and estimated your **TDEE**. For your **{fat_loss_type}** Fat Loss goal, 
-            we set your calories at **{fat_loss_type.lower()} intensity** ({'90%' if fat_loss_type == 'Low' else '85%' if fat_loss_type == 'Moderate' else '80%'} of your TDEE). 
-            This creates a controlled deficit while keeping protein high (based on your goal weight) to help protect muscle.
-            """)
-        else:
-            st.markdown(f"""
-            We calculated your **BMR** and estimated your **TDEE**. We then applied a 
-            **{abs(int(adjustment*100))}% {"deficit" if adjustment < 0 else "surplus" if adjustment > 0 else "maintenance"}** 
-            based on your goal of **{primary_goal}**.
-            """)
-
-        st.markdown("### Macro Strategy")
-        st.markdown(f"""
-        **Protein** is prioritized to help preserve muscle and support recovery. For all Fat Loss options, 
-        we calculate protein using your **goal weight × 1.1g**.
-        
-        After setting protein, the remaining calories are split between fat and carbohydrates. 
-        Use the slider above to adjust the balance based on your preferences and training performance.
-        """)
-
-        if primary_goal == "Fat Loss" and fat_loss_type:
-            if fat_loss_type == "Low":
-                st.info("This is a more conservative approach. It creates a smaller deficit, which is often easier to sustain long-term.")
-            elif fat_loss_type == "Moderate":
-                st.info("A balanced approach that provides good progress while remaining sustainable for most people.")
-            else:
-                st.info("This is a more aggressive approach. It creates a larger deficit and works best if you tolerate faster fat loss well.")
-        elif primary_goal == "Muscle Gain":
-            st.info("We use a controlled surplus to support muscle growth while minimizing excessive fat gain.")
-        elif primary_goal == "Reverse Diet":
-            st.info("Gradually increasing calories helps restore metabolic rate and energy after a period of dieting.")
-        else:
-            st.info("Maintenance calories support performance and long-term consistency without pushing for weight change.")
-
-    st.markdown("""
-    <div class="disclaimer">
-    <strong>Disclaimer:</strong> This tool provides general educational guidance based on evidence-based nutrition principles. 
-    Intended for qualified fitness professionals. Use professional judgment with each client.
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ====================== EXPORT & SHARE SECTION ======================
-    st.markdown('<h2 class="section-header">Export & Share</h2>', unsafe_allow_html=True)
-
-    def generate_pdf():
-        buffer = io.BytesIO()
-        doc = SimpleDocTemplate(buffer, pagesize=letter, 
-                                rightMargin=0.6*inch, leftMargin=0.6*inch,
-                                topMargin=0.5*inch, bottomMargin=0.5*inch)
-        
-        styles = getSampleStyleSheet()
-        title_style = ParagraphStyle('CustomTitle', parent=styles['Heading1'], fontSize=20, 
-                                     textColor=colors.HexColor('#0077B6'), alignment=TA_CENTER, spaceAfter=4)
-        heading_style = ParagraphStyle('CustomHeading', parent=styles['Heading2'], 
-                                       fontSize=13, textColor=colors.HexColor('#0077B6'), spaceBefore=10)
-        normal_style = ParagraphStyle('CustomNormal', parent=styles['Normal'], fontSize=10.5, leading=14)
-        
-        story = []
-        
-        # Burn Boot Camp Logo
-        logo_path = "burn_boot_camp_logo.png"
-        if os.path.exists(logo_path):
-            try:
-                logo = Image(logo_path, width=2.2*inch, height=0.85*inch)
-                logo_table = Table([[logo]], colWidths=[6.5*inch])
-                logo_table.setStyle(TableStyle([('ALIGN', (0, 0), (-1, -1), 'LEFT')]))
-                story.append(logo_table)
-            except:
-                story.append(Paragraph("<b>Burn Boot Camp</b>", 
-                    ParagraphStyle('LogoFallback', fontSize=14, textColor=colors.HexColor('#0077B6'), alignment=TA_LEFT, spaceAfter=6)))
-        else:
-            story.append(Paragraph("<b>Burn Boot Camp</b>", 
-                ParagraphStyle('LogoFallback', fontSize=14, textColor=colors.HexColor('#0077B6'), alignment=TA_LEFT, spaceAfter=6)))
-        
-        story.append(Spacer(1, 6))
-        story.append(Paragraph("Client Nutrition Report", title_style))
-        story.append(Paragraph(f"Generated: {datetime.date.today().strftime('%B %d, %Y')}", normal_style))
-        story.append(Spacer(1, 8))
-        story.append(HRFlowable(width="100%", thickness=2, color=colors.HexColor('#0077B6')))
-        story.append(Spacer(1, 10))
-        
-        story.append(Paragraph(f"<b>Client:</b> {client_name}", normal_style))
-        story.append(Paragraph(f"Age: {age} &nbsp;|&nbsp; Gender: {gender} &nbsp;|&nbsp; Height: {feet}'{inches}\"", normal_style))
-        story.append(Paragraph(f"Current Weight: {weight_lbs} lbs → Goal Weight: {goal_weight_lbs} lbs", normal_style))
-        story.append(Paragraph(f"<b>Primary Goal:</b> {primary_goal}", normal_style))
-        
-        if fat_loss_type:
-            story.append(Paragraph(f"<b>Fat Loss Type:</b> {fat_loss_type}", normal_style))
-        
-        if client_notes:
-            story.append(Paragraph(f"<b>Client Notes:</b> {client_notes}", normal_style))
-        
-        story.append(Spacer(1, 8))
-        story.append(Paragraph("<b>Calculations</b>", heading_style))
-        story.append(Paragraph(f"BMR: {bmr} cal &nbsp;|&nbsp; TDEE: {tdee} cal", normal_style))
-        story.append(Paragraph(f"<b>Recommended Daily Calories: {target_calories} cal</b>", normal_style))
-        story.append(Paragraph(f"<b>Macros:</b> Protein {protein_g}g &nbsp;|&nbsp; Fat {fat_g}g &nbsp;|&nbsp; Carbs {carb_g}g", normal_style))
-        
-        if timeframe:
-            story.append(Paragraph(f"<b>Estimated Time to Goal Weight:</b> ~{timeframe[0]} months, {timeframe[1]} days", normal_style))
-        
-        story.append(Spacer(1, 8))
-        story.append(Paragraph("<b>Why These Recommendations?</b>", heading_style))
-        
-        if primary_goal == "Fat Loss" and fat_loss_type:
-            why_text = f"""
-            We calculated your BMR and TDEE, then applied a <b>{fat_loss_type}</b> Fat Loss approach. 
-            Your calories were set at <b>{'90%' if fat_loss_type == 'Low' else '85%' if fat_loss_type == 'Moderate' else '80%'}</b> of your TDEE. 
-            Protein was calculated from your goal weight (× 1.1g) to help protect muscle during the deficit.
-            """
-        else:
-            why_text = f"""
-            We calculated your BMR and TDEE, then adjusted calories based on your goal of {primary_goal}. 
-            Protein was prioritized to support muscle retention and recovery.
-            """
-        
-        story.append(Paragraph(why_text, normal_style))
-        
-        story.append(Spacer(1, 14))
-        story.append(HRFlowable(width="100%", thickness=1, color=colors.grey))
-        story.append(Paragraph(
-            "<i>This report provides general guidance based on evidence-based nutrition principles. Use professional judgment with each client.</i>", 
-            ParagraphStyle('Footer', fontSize=9, textColor=colors.grey)))
-        
-        doc.build(story)
-        buffer.seek(0)
-        return buffer
-
-    pdf_buffer = generate_pdf()
-
-    # ====================== EXPORT BUTTONS ======================
-    st.markdown("**Quick Actions**")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        if st.button("📋 Copy Email Body + Notes", use_container_width=True):
-            email_body = f"""Subject: Your Personalized Nutrition Recommendations
-
-Hi {client_name.split()[0] if client_name else 'there'},
-
-Here is your customized nutrition plan:
-
-**Recommended Daily Calories:** {target_calories} cal
-**Macros:** Protein {protein_g}g | Fat {fat_g}g | Carbs {carb_g}g
-
-**Why these numbers?**
-We calculated your BMR and TDEE. For your {fat_loss_type.lower() if fat_loss_type else ''} fat loss goal, 
-we set calories at { '90%' if fat_loss_type == 'Low' else '85%' if fat_loss_type == 'Moderate' else '80%' if fat_loss_type else ''} of your TDEE.
-
-Please let me know if you have any questions!
-
-Best regards,
-[Your Name]"""
-            st.code(email_body)
-            st.success("Copied! Now click the button below to open Basecamp and paste it.")
-
-    with col2:
-        st.link_button(
-            "📝 Open Client Notes (Basecamp)",
-            "https://3.basecamp.com/5658951/buckets/39259287/message_boards/7850300503",
-            use_container_width=True
-        )
-
-    st.download_button(
-        "📄 Download PDF", 
-        data=pdf_buffer, 
-        file_name=f"Client_Nutrition_Report_{datetime.date.today()}.pdf", 
-        mime="application/pdf", 
-        use_container_width=True
+    e1, e2, e3 = st.columns(3)
+    e1.metric("BMR", f"{plan.bmr:,.0f} cal", help="Mifflin-St Jeor estimate at rest.")
+    e2.metric("Estimated TDEE", f"{plan.tdee:,} cal",
+              help="BMR × activity multiplier.")
+    e3.metric(
+        "Daily Target", f"{plan.target_calories:,} cal",
+        delta=f"{plan.daily_calorie_delta:+,} vs TDEE" if plan.daily_calorie_delta else "Maintenance",
+        delta_color="off",
     )
 
-    if st.button("🗑️ Clear All Data", type="secondary", use_container_width=True):
-        for key in list(st.session_state.keys()):
-            del st.session_state[key]
+    if plan.daily_calorie_delta:
+        word = "deficit" if plan.daily_calorie_delta < 0 else "surplus"
+        st.caption(
+            f"Weekly {word}: **{abs(plan.daily_calorie_delta) * 7:,} calories** "
+            f"(~{abs(plan.daily_calorie_delta) * 7 / 3500:.2f} lbs of theoretical "
+            f"tissue change per week)."
+        )
+
+    # ---------- Macro balance ----------
+    st.markdown('<div class="section-header">Macronutrient Targets</div>',
+                unsafe_allow_html=True)
+
+    st.markdown("**Fat / Carb Balance**")
+    sl1, sl2, sl3 = st.columns([1, 8, 1])
+    sl1.markdown("**🥑 Fat**")
+    with sl2:
+        st.slider("Fat / Carb Balance", 0, 100, 50, 5,
+                  key="fat_carb_slider", label_visibility="collapsed")
+    sl3.markdown("**🍚 Carbs**")
+
+    st.caption(
+        f"Fat is set at **{plan.fat_pct * 100:.0f}% of total calories** "
+        f"(centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates "
+        f"take the remainder."
+    )
+
+    m1, m2, m3 = st.columns(3)
+    m1.metric("Protein", f"{plan.protein_g}g",
+              help=f"{plan.protein_per_lb(profile.weight_lbs)}g per lb of current bodyweight")
+    m2.metric("Fat", f"{plan.fat_g:g}g", help=f"{plan.fat_cal:,.0f} calories")
+    m3.metric("Carbs", f"{plan.carb_g:g}g", help=f"{plan.carb_cal:,.0f} calories")
+
+    pcts = plan.macro_percentages()
+    if sum(pcts.values()) > 0 and plan.carb_g >= 0:
+        st.markdown(
+            f"""<div class="macro-bar">
+            <div class="macro-seg" style="width:{pcts['Protein']}%;background:{DEEP_NAVY};">
+                Protein {pcts['Protein']:.0f}%</div>
+            <div class="macro-seg" style="width:{pcts['Fat']}%;background:{BRAND_BLUE};">
+                Fat {pcts['Fat']:.0f}%</div>
+            <div class="macro-seg" style="width:{pcts['Carbs']}%;background:#9BD9F2;color:{DEEP_NAVY};">
+                Carbs {pcts['Carbs']:.0f}%</div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
+    st.caption(f"Total from macros: **{plan.macro_calorie_total:,.0f} calories**")
+
+    # ---------- Warnings ----------
+    for warning in plan.warnings:
+        st.warning(warning)
+
+    # ---------- Timeframe ----------
+    if plan.timeframe:
+        months, days, weeks = plan.timeframe
+        st.markdown('<div class="section-header">Goal Progress Estimate</div>',
+                    unsafe_allow_html=True)
+        t1, t2, t3 = st.columns(3)
+        t1.metric("Goal Weight", f"{profile.goal_weight_lbs:g} lbs")
+        t2.metric("Change Needed",
+                  f"{abs(profile.goal_weight_lbs - profile.weight_lbs):g} lbs")
+        t3.metric("Estimated Timeframe", f"{months} mo, {days} d",
+                  help=f"About {weeks:g} weeks at the planned rate of change.")
+        target_date = datetime.date.today() + datetime.timedelta(weeks=weeks)
+        st.caption(
+            f"At the planned rate, that lands around **{target_date.strftime('%B %Y')}**. "
+            f"Estimates assume steady adherence; real progress is rarely linear."
+        )
+
+    # ---------- Reasoning ----------
+    st.markdown('<div class="section-header">Professional Reasoning</div>',
+                unsafe_allow_html=True)
+    st.markdown("**Why these calories?**")
+    st.markdown(build_why_text(profile, plan).replace("<b>", "**").replace("</b>", "**"))
+
+    st.markdown("**Macro strategy**")
+    anchor = "goal weight" if profile.primary_goal == "Fat Loss" else "current bodyweight"
+    st.markdown(
+        f"Protein is set first, from **{anchor}**, because it is the target with the least "
+        f"room to compromise — it protects lean mass and drives satiety. Fat is then set as "
+        f"a share of total calories to support hormone function, and carbohydrates take "
+        f"whatever remains as training fuel. Use the slider to shift that fat/carb split "
+        f"toward whatever the client actually eats and performs on."
+    )
+
+    GOAL_NOTES = {
+        "Low": "A conservative deficit. Slower on paper, but far easier to sustain — "
+               "which is usually what determines the outcome.",
+        "Moderate": "A balanced deficit. Meaningful weekly progress that most clients can "
+                    "hold for a full phase.",
+        "Aggressive": "A larger deficit. Best for clients with more to lose, good "
+                      "adherence history, and a defined end date. Watch recovery and "
+                      "training quality.",
+        "Muscle Gain": "A controlled surplus supports growth while limiting fat gain. "
+                       "Pair with progressive overload — a surplus without a training "
+                       "stimulus is just a surplus.",
+        "Reverse Diet": "Calories increase gradually to restore energy, hormone function, "
+                        "and metabolic rate after dieting. Expect some weight change; "
+                        "that is the point.",
+        "Body Recomposition": "A small deficit with high protein and consistent resistance "
+                              "training. Scale weight may barely move while body "
+                              "composition shifts — track photos and measurements too.",
+        "Maintenance": "Calories support performance, recovery, and consistency without "
+                       "pushing weight in either direction.",
+    }
+    key = profile.fat_loss_type if profile.primary_goal == "Fat Loss" else profile.primary_goal
+    if key in GOAL_NOTES:
+        st.info(GOAL_NOTES[key])
+
+    if profile.client_notes:
+        st.markdown("**Trainer notes**")
+        st.markdown(f"> {profile.client_notes}")
+
+    st.markdown(
+        '<div class="disclaimer"><strong>Disclaimer:</strong> General educational guidance '
+        'based on evidence-based nutrition principles. Not medical or dietetic advice. '
+        'Clients with medical conditions, who are pregnant or nursing, or who take '
+        'prescription medication should consult their healthcare provider before changing '
+        'their nutrition.</div>',
+        unsafe_allow_html=True,
+    )
+
+    # ---------- Export ----------
+    st.markdown('<div class="section-header">Export &amp; Share</div>',
+                unsafe_allow_html=True)
+
+    safe_name = ("".join(c for c in profile.client_name if c.isalnum() or c in " -_")
+                 .strip().replace(" ", "_") or "Client")
+    today = datetime.date.today()
+
+    x1, x2 = st.columns(2)
+    with x1:
+        with st.spinner("Building PDF…"):
+            pdf_buffer = generate_pdf(
+                profile, plan,
+                trainer_name=st.session_state.get("trainer_name", ""),
+                include_member_guide=include_guide,
+            )
+        st.download_button(
+            "📄 Download PDF Report", data=pdf_buffer,
+            file_name=f"Nutrition_Report_{safe_name}_{today}.pdf",
+            mime="application/pdf", use_container_width=True, type="primary",
+        )
+    with x2:
+        st.download_button(
+            "💾 Save Client Profile (.json)",
+            data=json.dumps(profile.to_dict(), indent=2),
+            file_name=f"Profile_{safe_name}.json",
+            mime="application/json", use_container_width=True,
+            help="Reload later from the sidebar to regenerate or update this plan.",
+        )
+
+    macro_line = f"Protein {plan.protein_g}g | Fat {plan.fat_g:g}g | Carbs {plan.carb_g:g}g"
+    why_plain = build_why_text(profile, plan).replace("<b>", "").replace("</b>", "")
+    signature = st.session_state.get("trainer_name", "").strip() or "[Your Name]"
+
+    email_body = f"""Subject: Your Personalized Nutrition Plan
+
+Hi {profile.first_name},
+
+Here are your nutrition targets:
+
+Daily Calories: {plan.target_calories:,}
+Macros: {macro_line}
+
+Why these numbers:
+{why_plain}
+
+Remember, these are a starting point. We'll track how you feel and perform
+over the next two to three weeks and adjust from there.
+
+Questions? Bring them to your next session.
+
+{signature}
+Burn Boot Camp"""
+
+    with st.expander("📋 Email draft — click the copy icon in the top-right of the box"):
+        st.code(email_body, language=None)
+
+    st.link_button("📝 Open Client Notes (Basecamp)", BASECAMP_URL,
+                   use_container_width=True)
+
+    if st.button("🗑️ Clear All Client Data", type="secondary", use_container_width=True):
+        clear_all()
         st.rerun()
 
-st.markdown("---")
-st.caption("Professional tool for fitness coaches • Evidence-based • Client Nutrition Report")
+else:
+    st.info("Fill in the client details above and select **Generate Report**.")
