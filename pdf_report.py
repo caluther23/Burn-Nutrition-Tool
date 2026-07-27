@@ -276,6 +276,53 @@ def _tracker_table(plan_date, s: dict) -> Table:
     return t
 
 
+def _sample_day_table(plan: NutritionPlan, meals: int, s: dict) -> Optional[Table]:
+    """An illustrative day split into named meals with macro amounts."""
+    day = plan.sample_day(meals)
+    if not day:
+        return None
+
+    head = ParagraphStyle("SDHead", parent=s["cell"], fontSize=8.5,
+                          textColor=colors.white, alignment=TA_CENTER, leading=11)
+    meal = ParagraphStyle("SDMeal", parent=s["cell"], fontSize=9, leading=11)
+    idea = ParagraphStyle("SDIdea", parent=s["cell"], fontSize=8.5, leading=11,
+                          textColor=MID_GREY)
+    num = ParagraphStyle("SDNum", parent=s["cell"], fontSize=9, leading=11,
+                         alignment=TA_CENTER)
+
+    headers = [
+        Paragraph("<b>Meal</b>", head),
+        Paragraph("<b>Idea</b>", head),
+        Paragraph("<b>Cal</b>", head),
+        Paragraph("<b>P</b>", head),
+        Paragraph("<b>F</b>", head),
+        Paragraph("<b>C</b>", head),
+    ]
+    rows = [headers]
+    for m in day:
+        rows.append([
+            Paragraph(f"<b>{esc(m['name'])}</b>", meal),
+            Paragraph(esc(m["idea"]), idea),
+            Paragraph(f"{m['calories']:,}", num),
+            Paragraph(f"{m['protein_g']}", num),
+            Paragraph(f"{m['fat_g']}", num),
+            Paragraph(f"{m['carb_g']}", num),
+        ])
+
+    t = Table(rows, colWidths=[0.95 * inch, 2.75 * inch, 0.75 * inch,
+                               0.55 * inch, 0.5 * inch, 0.5 * inch])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), DEEP_NAVY),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, LIGHT_GREY]),
+        ("GRID", (0, 0), (-1, -1), 0.5, BORDER_GREY),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+        ("LEFTPADDING", (0, 0), (-1, -1), 5),
+    ]))
+    return t
+
+
 def _page_furniture(canvas, doc):
     """Footer drawn on every page."""
     canvas.saveState()
@@ -364,6 +411,7 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
                  trainer_name: str = "", include_member_guide: bool = True,
                  trainer_email: str = "", gym_location: str = "",
                  show_food_anchors: bool = True,
+                 show_sample_day: bool = True,
                  show_tracker: bool = True) -> io.BytesIO:
     """Build the report and return a seek(0) BytesIO buffer."""
     buffer = io.BytesIO()
@@ -464,6 +512,14 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
         f"Protein {plan.protein_per_lb(profile.weight_lbs)}g per lb of current bodyweight",
         s["small"]))
 
+    # ---------- Hydration & fiber ----------
+    story.append(Spacer(1, 8))
+    story.append(_callout(
+        f"<b>Water:</b> aim for about <b>{plan.water_oz} oz</b> "
+        f"(~{plan.water_cups} cups) a day.&nbsp;&nbsp;"
+        f"<b>Fiber:</b> aim for about <b>{plan.fiber_g} g</b> a day. "
+        f"Both support digestion, appetite control, and training performance.", s))
+
     # ---------- Reasoning (closes page 1) ----------
     story.append(KeepTogether([
         Paragraph("Why These Numbers", s["heading"]),
@@ -498,6 +554,20 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
                     "single food. Mix and match in practice — these are yardsticks, not "
                     "meal plans.", s["small"]),
             ]))
+
+        if show_sample_day:
+            sd = _sample_day_table(plan, meals, s)
+            if sd:
+                story.append(Spacer(1, 10))
+                story.append(KeepTogether([
+                    Paragraph("A Sample Day", s["heading"]),
+                    Paragraph(
+                        "One way the day could come together. Swap foods freely — the goal "
+                        "is to land near the daily totals, not to copy this exactly.",
+                        s["small"]),
+                    Spacer(1, 4),
+                    sd,
+                ]))
 
     # ---------- Trainer notes (compact, bounded) ----------
     if profile.client_notes.strip():
