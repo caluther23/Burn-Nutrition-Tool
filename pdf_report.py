@@ -428,8 +428,10 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
         word = "below" if delta < 0 else "above"
         story.append(Spacer(1, 5))
         story.append(Paragraph(
-            f"That is <b>{abs(delta)} calories {word}</b> the estimated daily expenditure "
-            f"(~{abs(delta) * 7:,} calories per week).", s["small"]))
+            f"That is <b>{abs(delta):,} calories per day {word}</b> the estimated "
+            f"expenditure — about <b>{abs(delta) * 7:,} calories per week</b> "
+            f"(~{abs(delta) * 7 / 3500:.2f} lbs of theoretical tissue change per week).",
+            s["small"]))
 
     # ---------- Macros ----------
     story.append(Paragraph("Macronutrient Targets", s["heading"]))
@@ -537,8 +539,9 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
 
         if review_weeks:
             review_date = plan_date + datetime.timedelta(weeks=review_weeks)
+            wk_phrase = "1 week" if review_weeks == 1 else f"{review_weeks} weeks"
             step = (f"Let's check in around <b>{review_date.strftime('%B %d, %Y')}</b> "
-                    f"(about {review_weeks} weeks out) to review your numbers and adjust.")
+                    f"(about {wk_phrase} out) to review your numbers and adjust.")
         else:
             step = ("Bring your check-in numbers to your next session and we'll review "
                     "and adjust together.")
