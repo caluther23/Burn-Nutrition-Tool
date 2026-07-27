@@ -485,7 +485,7 @@ m2.metric("Fat", f"{plan.fat_g:g}g", help=f"{plan.fat_cal:,.0f} calories")
 m3.metric("Carbs", f"{plan.carb_g:g}g", help=f"{plan.carb_cal:,.0f} calories")
 
 pcts = plan.macro_percentages()
-if sum(pcts.values()) > 0 and plan.carb_g >= 0:
+if plan.has_valid_macros and sum(pcts.values()) > 0:
     st.markdown(
         f"""<div class="macro-bar">
         <div class="macro-seg" style="width:{pcts['Protein']}%;background:{INK};color:#fff;">
@@ -504,13 +504,13 @@ st.caption(f"Total from macros: **{plan.macro_calorie_total:,.0f} calories**")
 meals = st.radio("Meals per day", [3, 4, 5], horizontal=True,
                  key="meals_per_day",
                  help="Splits the daily targets evenly as a starting reference.")
-pm = plan.per_meal(meals)
-st.caption(
-    f"Roughly per meal across {meals}: **{pm['protein_g']}g protein · "
-    f"{pm['fat_g']}g fat · {pm['carb_g']}g carbs · {pm['calories']:,} cal**"
-)
+if plan.has_valid_macros:
+    pm = plan.per_meal(meals)
+    st.caption(
+        f"Roughly per meal across {meals}: **{pm['protein_g']}g protein · "
+        f"{pm['fat_g']}g fat · {pm['carb_g']}g carbs · {pm['calories']:,} cal**"
+    )
 
-if plan.carb_g >= 0:
     with st.expander("🍽️ What these macros look like in real food"):
         anchors = plan.food_anchors()
         fa1, fa2, fa3 = st.columns(3)
@@ -527,6 +527,9 @@ if plan.carb_g >= 0:
                                 unsafe_allow_html=True)
         st.caption("Each is one way to hit that macro for the whole day with a single "
                    "food — yardsticks, not meal plans.")
+else:
+    st.caption("Per-meal and food breakdowns are hidden until the macro split is "
+               "valid — adjust the slider or calorie target above.")
 
 for warning in plan.warnings:
     st.warning(warning)
