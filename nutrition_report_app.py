@@ -249,6 +249,11 @@ WIDGET_DEFAULTS = {
 for _key, _default in WIDGET_DEFAULTS.items():
     st.session_state.setdefault(_key, _default)
 
+# Handoff widgets are keyed without the in_ prefix; initialize once so the
+# profile (built before these widgets render) reads a stable value.
+st.session_state.setdefault("meals_per_day", 3)
+st.session_state.setdefault("review_weeks", 3)
+
 
 def store_profile(profile: ClientProfile) -> None:
     st.session_state["profile_data"] = profile.to_dict()
@@ -261,10 +266,17 @@ def clear_all() -> None:
 
 def apply_profile_to_widgets(profile: ClientProfile) -> None:
     """Push a loaded profile into the live input widgets."""
+    # These two live on un-prefixed widget keys, not in_<field>.
+    unprefixed = {"meals_per_day", "review_weeks"}
     for key, value in profile.to_dict().items():
         if key == "fat_loss_type" and value is None:
             value = "Moderate"
-        st.session_state[f"in_{key}"] = value
+        if key == "plan_date":
+            continue  # derived at render time; not a widget
+        if key in unprefixed:
+            st.session_state[key] = value
+        else:
+            st.session_state[f"in_{key}"] = value
 
 
 def card(text: str) -> None:
@@ -279,12 +291,28 @@ with st.sidebar:
     if LOGO_PATH.exists():
         st.image(str(LOGO_PATH), use_container_width=True)
 
-    st.markdown("### Report Settings")
+    st.markdown("### Trainer & Gym")
     st.text_input("Trainer name", key="trainer_name",
-                  placeholder="Appears on the PDF")
+                  placeholder="e.g., Colby Reid, CPT")
+    st.text_input("Trainer email", key="trainer_email",
+                  placeholder="colby@burnbootcamp.com")
+    st.text_input("Gym location", key="gym_location",
+                  placeholder="Burn Boot Camp — Marietta/Sprayberry")
+    st.caption("These appear in the contact block on the report's final page. "
+               "Set once — they carry across every client.")
+
+    st.markdown("### PDF Content")
     include_guide = st.checkbox(
-        "Include member education page in PDF", value=True,
-        help="Adds a second page explaining BMR, TDEE, and each macro in plain English.",
+        "Member education page", value=True,
+        help="Plain-English guide to BMR, TDEE, and each macro.",
+    )
+    show_anchors = st.checkbox(
+        "Food portion anchors", value=True,
+        help="Shows what each macro target looks like in real food.",
+    )
+    show_tracker = st.checkbox(
+        "Weekly check-in tracker", value=True,
+        help="A blank 4-week weigh-in grid the client fills in by hand.",
     )
 
     st.divider()
@@ -390,6 +418,8 @@ profile = ClientProfile(
     fat_loss_type=(st.session_state["in_fat_loss_type"]
                    if selected_goal == "Fat Loss" else None),
     client_notes=st.session_state["in_client_notes"].strip(),
+    meals_per_day=int(st.session_state.get("meals_per_day", 3)),
+    review_weeks=int(st.session_state.get("review_weeks", 3)),
 )
 
 errors = validate_profile(profile)
@@ -470,14 +500,32 @@ if sum(pcts.values()) > 0 and plan.carb_g >= 0:
 st.caption(f"Total from macros: **{plan.macro_calorie_total:,.0f} calories**")
 
 # ---------- Per-meal reference ----------
-meals = st.radio("Meals per day", [3, 4, 5], index=0, horizontal=True,
+meals = st.radio("Meals per day", [3, 4, 5], horizontal=True,
                  key="meals_per_day",
                  help="Splits the daily targets evenly as a starting reference.")
+pm = plan.per_meal(meals)
 st.caption(
-    f"Roughly per meal across {meals}: **{plan.protein_g / meals:.0f}g protein · "
-    f"{plan.fat_g / meals:.0f}g fat · {plan.carb_g / meals:.0f}g carbs · "
-    f"{plan.target_calories / meals:,.0f} cal**"
+    f"Roughly per meal across {meals}: **{pm['protein_g']}g protein · "
+    f"{pm['fat_g']}g fat · {pm['carb_g']}g carbs · {pm['calories']:,} cal**"
 )
+
+if plan.carb_g >= 0:
+    with st.expander("🍽️ What these macros look like in real food"):
+        anchors = plan.food_anchors()
+        fa1, fa2, fa3 = st.columns(3)
+        for col, (macro, grams, label) in zip(
+            (fa1, fa2, fa3),
+            [("protein", plan.protein_g, "Protein"),
+             ("fat", plan.fat_g, "Fat"),
+             ("carb", plan.carb_g, "Carbs")],
+        ):
+            with col:
+                st.markdown(f"**{label} · {grams:g}g**")
+                for line in anchors[macro]:
+                    st.markdown(f"<span style='font-size:0.85rem'>{line}</span>",
+                                unsafe_allow_html=True)
+        st.caption("Each is one way to hit that macro for the whole day with a single "
+                   "food — yardsticks, not meal plans.")
 
 for warning in plan.warnings:
     st.warning(warning)
@@ -558,6 +606,16 @@ safe_name = ("".join(c for c in profile.client_name if c.isalnum() or c in " -_"
              .strip().replace(" ", "_") or "Client")
 today = datetime.date.today()
 
+review_weeks = st.select_slider(
+    "Check in again after", options=[0, 2, 3, 4, 6, 8],
+    key="review_weeks",
+    format_func=lambda w: "No date" if w == 0 else f"{w} weeks",
+    help="Sets the review date shown on the report. 'No date' omits it.",
+)
+if review_weeks:
+    review_date = today + datetime.timedelta(weeks=review_weeks)
+    st.caption(f"Report will show a review date of **{review_date.strftime('%B %d, %Y')}**.")
+
 if not profile.client_name:
     st.caption("Add a client name above to personalize the report and file names.")
 
@@ -569,6 +627,10 @@ with x1:
                 profile, plan,
                 trainer_name=st.session_state.get("trainer_name", ""),
                 include_member_guide=include_guide,
+                trainer_email=st.session_state.get("trainer_email", ""),
+                gym_location=st.session_state.get("gym_location", ""),
+                show_food_anchors=show_anchors,
+                show_tracker=show_tracker,
             ).getvalue()
     if st.session_state.get("pdf_bytes"):
         st.download_button(
