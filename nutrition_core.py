@@ -330,9 +330,18 @@ class NutritionPlan:
             return "surplus"
         return "maintenance"
 
+    @property
+    def has_valid_macros(self) -> bool:
+        """False when the split produced negative carbs (targets over-constrained).
+
+        A single flag the UI and PDF can check before rendering any macro
+        breakdown, so negative values never reach a client-facing surface.
+        """
+        return self.carb_g >= 0 and self.fat_g >= 0
+
     def macro_percentages(self) -> dict[str, float]:
         total = self.macro_calorie_total
-        if total <= 0:
+        if total <= 0 or not self.has_valid_macros:
             return {"Protein": 0.0, "Fat": 0.0, "Carbs": 0.0}
         return {
             "Protein": round(self.protein_cal / total * 100, 1),
