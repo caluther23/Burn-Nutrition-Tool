@@ -164,10 +164,102 @@ def _info_table(rows: list[tuple[str, str]], s: dict) -> Table:
     t = Table(data, colWidths=[1.6 * inch, 5.3 * inch])
     t.setStyle(TableStyle([
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("TOPPADDING", (0, 0), (-1, -1), 3),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+        ("TOPPADDING", (0, 0), (-1, -1), 2),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
         ("LEFTPADDING", (0, 0), (0, -1), 0),
         ("LINEBELOW", (0, 0), (-1, -2), 0.4, BORDER_GREY),
+    ]))
+    return t
+
+
+def _callout(html: str, s: dict, strong: bool = False) -> Table:
+    """A tinted, bordered callout box that wraps its text cleanly."""
+    style = ParagraphStyle(
+        "Callout", parent=s["body"], fontSize=9.5, leading=13,
+        textColor=DEEP_NAVY,
+    )
+    t = Table([[Paragraph(html, style)]], colWidths=[6.9 * inch])
+    bg = colors.HexColor("#E8F8FD")
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), bg),
+        ("BOX", (0, 0), (-1, -1), 0.75, BRAND_BLUE if strong else BORDER_GREY),
+        ("LINEBEFORE", (0, 0), (0, -1), 3, BRAND_BLUE),
+        ("LEFTPADDING", (0, 0), (-1, -1), 9),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 9),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+    ]))
+    return t
+
+
+def _anchor_table(plan: NutritionPlan, s: dict) -> Table:
+    """Three columns of single-food portion equivalents per macro."""
+    anchors = plan.food_anchors()
+    head = ParagraphStyle("AHead", parent=s["cell"], fontSize=9.5,
+                          textColor=colors.white, alignment=TA_CENTER, leading=12)
+    item = ParagraphStyle("AItem", parent=s["cell"], fontSize=9, leading=13,
+                          alignment=TA_CENTER)
+
+    headers = [
+        Paragraph(f"<b>PROTEIN · {plan.protein_g}g</b>", head),
+        Paragraph(f"<b>FAT · {plan.fat_g:g}g</b>", head),
+        Paragraph(f"<b>CARBS · {plan.carb_g:g}g</b>", head),
+    ]
+    max_rows = max(len(anchors["protein"]), len(anchors["fat"]), len(anchors["carb"]))
+    body_rows = []
+    for i in range(max_rows):
+        row = []
+        for key in ("protein", "fat", "carb"):
+            col = anchors[key]
+            row.append(Paragraph(col[i] if i < len(col) else "", item))
+        body_rows.append(row)
+
+    data = [headers] + body_rows
+    col_w = 6.9 * inch / 3
+    t = Table(data, colWidths=[col_w] * 3)
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, 0), DEEP_NAVY),
+        ("BACKGROUND", (1, 0), (1, 0), BRAND_BLUE),
+        ("BACKGROUND", (2, 0), (2, 0), colors.HexColor("#7FD3EE")),
+        ("TEXTCOLOR", (2, 0), (2, 0), colors.white),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, LIGHT_GREY]),
+        ("GRID", (0, 0), (-1, -1), 0.5, BORDER_GREY),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("TOPPADDING", (0, 0), (-1, -1), 5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+    ]))
+    return t
+
+
+def _tracker_table(plan_date, s: dict) -> Table:
+    """A blank 4-week weigh-in / notes grid the client can fill in by hand."""
+    import datetime as _dt
+    head = ParagraphStyle("THead", parent=s["cell"], fontSize=9,
+                          textColor=colors.white, alignment=TA_CENTER, leading=11)
+    cell = ParagraphStyle("TCell", parent=s["cell"], fontSize=9,
+                          textColor=MID_GREY, alignment=TA_LEFT, leading=11)
+
+    headers = [Paragraph(f"<b>{h}</b>", head)
+               for h in ("Week", "Date", "Weigh-In", "How Training / Energy Felt")]
+    rows = [headers]
+    for wk in range(1, 5):
+        d = plan_date + _dt.timedelta(weeks=wk - 1)
+        rows.append([
+            Paragraph(f"<b>{wk}</b>", cell),
+            Paragraph(d.strftime("%b %d"), cell),
+            Paragraph("", cell),
+            Paragraph("", cell),
+        ])
+
+    t = Table(rows, colWidths=[0.7 * inch, 1.0 * inch, 1.2 * inch, 4.0 * inch],
+              rowHeights=[0.26 * inch] + [0.42 * inch] * 4)
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), DEEP_NAVY),
+        ("GRID", (0, 0), (-1, -1), 0.5, BORDER_GREY),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, 0), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 4),
     ]))
     return t
 
@@ -257,7 +349,10 @@ MEMBER_GUIDE = [
 
 
 def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
-                 trainer_name: str = "", include_member_guide: bool = True) -> io.BytesIO:
+                 trainer_name: str = "", include_member_guide: bool = True,
+                 trainer_email: str = "", gym_location: str = "",
+                 show_food_anchors: bool = True,
+                 show_tracker: bool = True) -> io.BytesIO:
     """Build the report and return a seek(0) BytesIO buffer."""
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(
@@ -283,9 +378,20 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
     story.append(Spacer(1, 8))
     story.append(Paragraph("Client Nutrition Report", s["title"]))
 
-    meta = f"Generated {datetime.date.today().strftime('%B %d, %Y')}"
+    # Plan date (from profile if set, else today) and computed review date
+    try:
+        plan_date = (datetime.date.fromisoformat(profile.plan_date)
+                     if profile.plan_date else datetime.date.today())
+    except (ValueError, TypeError):
+        plan_date = datetime.date.today()
+
+    meta = f"Plan date {plan_date.strftime('%B %d, %Y')}"
     if trainer_name.strip():
         meta += f"  •  Prepared by {trainer_name.strip()}"
+    review_weeks = max(0, int(getattr(profile, "review_weeks", 0) or 0))
+    if review_weeks:
+        review_date = plan_date + datetime.timedelta(weeks=review_weeks)
+        meta += f"  •  Review by {review_date.strftime('%B %d, %Y')}"
     story.append(Paragraph(meta, s["subtitle"]))
     story.append(Spacer(1, 6))
     story.append(HRFlowable(width="100%", thickness=2.5, color=BRAND_BLUE, spaceAfter=10))
@@ -332,30 +438,57 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
         ("Fat", f"{plan.fat_g:g}g"),
         ("Carbs", f"{plan.carb_g:g}g"),
     ], s, accent_last=False))
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 7))
 
     bar = _macro_bar(plan)
     if bar:
         story.append(bar)
-        story.append(Spacer(1, 5))
+        story.append(Spacer(1, 4))
 
     story.append(Paragraph(
         f"Calories from macros: {plan.macro_calorie_total:,.0f}  •  "
         f"Protein {plan.protein_per_lb(profile.weight_lbs)}g per lb of current bodyweight",
         s["small"]))
 
-    # ---------- Reasoning ----------
-    story.append(Paragraph("Why These Numbers", s["heading"]))
-    story.append(Paragraph(build_why_text(profile, plan), s["body"]))
+    # ---------- Reasoning (closes page 1) ----------
+    story.append(KeepTogether([
+        Paragraph("Why These Numbers", s["heading"]),
+        Paragraph(build_why_text(profile, plan), s["body"]),
+    ]))
 
+    # ---------- PAGE 2: What this looks like on a plate ----------
+    story.append(PageBreak())
+    story.append(Paragraph("What This Looks Like on a Plate", s["heading"]))
+
+    meals = max(1, int(getattr(profile, "meals_per_day", 3) or 3))
+    pm = plan.per_meal(meals)
+    story.append(Paragraph(
+        f"Split evenly across <b>{meals} meals</b>, each meal lands near "
+        f"<b>{pm['calories']:,} cal</b> — {pm['protein_g']}g protein, "
+        f"{pm['fat_g']}g fat, {pm['carb_g']}g carbs. Real meals vary; this is a "
+        f"reference point, not a rule.", s["body"]))
+
+    if show_food_anchors:
+        story.append(Spacer(1, 5))
+        story.append(KeepTogether([
+            _anchor_table(plan, s),
+            Spacer(1, 3),
+            Paragraph(
+                "Each column is one way to hit that macro for the whole day using a single "
+                "food. Mix and match in practice — these are yardsticks, not meal plans.",
+                s["small"]),
+        ]))
+
+    # ---------- Trainer notes (compact, bounded) ----------
     if profile.client_notes.strip():
-        story.append(Paragraph("Trainer Notes", s["heading"]))
-        note = profile.client_notes.replace("&", "&amp;").replace("<", "&lt;").replace("\n", "<br/>")
-        story.append(Paragraph(note, s["body"]))
+        story.append(Spacer(1, 4))
+        note = (profile.client_notes.replace("&", "&amp;").replace("<", "&lt;")
+                .replace("\n", "<br/>"))
+        story.append(_callout(f"<b>Coach notes:</b> {note}", s))
 
     # ---------- Disclaimer ----------
-    story.append(Spacer(1, 8))
-    story.append(HRFlowable(width="100%", thickness=0.75, color=BORDER_GREY, spaceAfter=5))
+    story.append(Spacer(1, 7))
+    story.append(HRFlowable(width="100%", thickness=0.75, color=BORDER_GREY, spaceAfter=4))
     story.append(Paragraph(
         "<i>This report provides general educational guidance based on evidence-based "
         "nutrition principles. It is not medical or dietetic advice and does not replace "
@@ -363,13 +496,9 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
         "who are pregnant or nursing, or who take prescription medication should consult "
         "their healthcare provider before changing their nutrition.</i>", s["small"]))
 
-    # ---------- Page 2 ----------
+    # ---------- Member guide (continues page 2) ----------
     if include_member_guide:
-        story.append(PageBreak())
-        story.append(Paragraph("Understanding Your Plan", s["title"]))
-        story.append(Paragraph("A plain-English guide to the numbers on page one.", s["subtitle"]))
-        story.append(Spacer(1, 6))
-        story.append(HRFlowable(width="100%", thickness=2.5, color=BRAND_BLUE, spaceAfter=8))
+        story.append(Paragraph("Understanding Your Plan", s["heading"]))
 
         guide_heading = ParagraphStyle(
             "GuideHeading", parent=s["heading"], fontSize=11.5,
@@ -384,11 +513,39 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
                 Paragraph(text, guide_body),
             ]))
 
-        story.append(Spacer(1, 10))
-        story.append(HRFlowable(width="100%", thickness=0.75, color=BORDER_GREY, spaceAfter=5))
-        story.append(Paragraph(
-            "Questions about anything here? Bring them to your next session — that is "
-            "exactly what your trainer is for.", s["small"]))
+        # ---------- Tracker ----------
+        if show_tracker:
+            story.append(KeepTogether([
+                Paragraph("Weekly Check-In", s["heading"]),
+                Paragraph(
+                    "Same day, same conditions each week — first thing in the morning, "
+                    "after using the bathroom, before eating or drinking. One weekly "
+                    "number tells you more than daily ups and downs.", guide_body),
+                Spacer(1, 5),
+                _tracker_table(plan_date, s),
+            ]))
+
+        # ---------- Contact / hand-off ----------
+        contact_bits = []
+        if trainer_name.strip():
+            contact_bits.append(f"<b>{trainer_name.strip()}</b>")
+        if trainer_email.strip():
+            contact_bits.append(trainer_email.strip())
+        if gym_location.strip():
+            contact_bits.append(gym_location.strip())
+        contact_line = "  •  ".join(contact_bits) if contact_bits else "Your Burn coach"
+
+        if review_weeks:
+            review_date = plan_date + datetime.timedelta(weeks=review_weeks)
+            step = (f"Let's check in around <b>{review_date.strftime('%B %d, %Y')}</b> "
+                    f"(about {review_weeks} weeks out) to review your numbers and adjust.")
+        else:
+            step = ("Bring your check-in numbers to your next session and we'll review "
+                    "and adjust together.")
+        story.append(KeepTogether([
+            Paragraph("Your Next Step", s["heading"]),
+            _callout(f"{step}<br/>{contact_line}", s, strong=True),
+        ]))
 
     doc.build(story, onFirstPage=_page_furniture, onLaterPages=_page_furniture)
     buffer.seek(0)
