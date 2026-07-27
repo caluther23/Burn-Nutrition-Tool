@@ -447,17 +447,18 @@ e2.metric("Estimated TDEE", f"{plan.tdee:,} cal", help="BMR × activity multipli
 with e3:
     st.metric(
         "Daily Target", f"{plan.target_calories:,} cal",
-        delta=(f"{plan.daily_calorie_delta:+,} vs TDEE"
+        delta=(f"{plan.daily_calorie_delta:+,} cal/day vs TDEE"
                if plan.daily_calorie_delta else "At maintenance"),
         delta_color="off",
     )
 
 if plan.daily_calorie_delta:
     word = "deficit" if plan.daily_calorie_delta < 0 else "surplus"
+    daily = abs(plan.daily_calorie_delta)
+    weekly = daily * 7
     st.caption(
-        f"Weekly {word}: **{abs(plan.daily_calorie_delta) * 7:,} calories** "
-        f"(~{abs(plan.daily_calorie_delta) * 7 / 3500:.2f} lbs of theoretical tissue "
-        f"change per week)."
+        f"That {word} of **{daily:,} cal/day** adds up to **{weekly:,} cal/week** "
+        f"(~{weekly / 3500:.2f} lbs of theoretical tissue change per week)."
     )
 
 # ---------- Macros ----------
@@ -607,9 +608,9 @@ safe_name = ("".join(c for c in profile.client_name if c.isalnum() or c in " -_"
 today = datetime.date.today()
 
 review_weeks = st.select_slider(
-    "Check in again after", options=[0, 2, 3, 4, 6, 8],
+    "Check in again after", options=[0, 1, 2, 3, 4, 6, 8],
     key="review_weeks",
-    format_func=lambda w: "No date" if w == 0 else f"{w} weeks",
+    format_func=lambda w: "No date" if w == 0 else ("1 week" if w == 1 else f"{w} weeks"),
     help="Sets the review date shown on the report. 'No date' omits it.",
 )
 if review_weeks:
