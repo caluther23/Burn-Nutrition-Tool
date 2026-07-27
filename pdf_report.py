@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import datetime
 import io
+from html import escape as _html_escape
 from pathlib import Path
 from typing import Optional
 
@@ -23,6 +24,17 @@ from reportlab.platypus import (
 from reportlab.lib.utils import ImageReader
 
 from nutrition_core import ClientProfile, NutritionPlan
+
+
+def esc(text: str) -> str:
+    """Escape user-supplied text before it enters a ReportLab Paragraph.
+
+    ReportLab parses a mini-HTML in Paragraphs, so an unescaped '<' or '&' in a
+    client name or note can garble output or raise a parse error mid-render.
+    Every free-text value that reaches a Paragraph must pass through here.
+    """
+    return _html_escape(str(text or ""), quote=False)
+
 
 # ---- Burn Boot Camp palette ----
 BRAND_BLUE = colors.HexColor("#00B2E2")
@@ -387,7 +399,7 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
 
     meta = f"Plan date {plan_date.strftime('%B %d, %Y')}"
     if trainer_name.strip():
-        meta += f"  •  Prepared by {trainer_name.strip()}"
+        meta += f"  •  Prepared by {esc(trainer_name.strip())}"
     review_weeks = max(0, int(getattr(profile, "review_weeks", 0) or 0))
     if review_weeks:
         review_date = plan_date + datetime.timedelta(weeks=review_weeks)
@@ -403,12 +415,12 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
         goal_line += f" — {profile.fat_loss_type} intensity"
 
     rows = [
-        ("Name", profile.client_name or "—"),
-        ("Age / Gender", f"{profile.age} · {profile.gender}"),
+        ("Name", esc(profile.client_name) if profile.client_name else "—"),
+        ("Age / Gender", f"{profile.age} · {esc(profile.gender)}"),
         ("Height", profile.height_display),
         ("Weight", f"{profile.weight_lbs:g} lbs → goal {profile.goal_weight_lbs:g} lbs"),
-        ("Activity", profile.activity_level),
-        ("Primary Goal", goal_line),
+        ("Activity", esc(profile.activity_level)),
+        ("Primary Goal", esc(goal_line)),
     ]
     if plan.timeframe:
         months, days, weeks = plan.timeframe
@@ -462,30 +474,35 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
     story.append(PageBreak())
     story.append(Paragraph("What This Looks Like on a Plate", s["heading"]))
 
-    meals = max(1, int(getattr(profile, "meals_per_day", 3) or 3))
-    pm = plan.per_meal(meals)
-    story.append(Paragraph(
-        f"Split evenly across <b>{meals} meals</b>, each meal lands near "
-        f"<b>{pm['calories']:,} cal</b> — {pm['protein_g']}g protein, "
-        f"{pm['fat_g']}g fat, {pm['carb_g']}g carbs. Real meals vary; this is a "
-        f"reference point, not a rule.", s["body"]))
+    if not plan.has_valid_macros:
+        story.append(Paragraph(
+            "The current calorie target is fully accounted for by protein and fat, which "
+            "leaves no room for a carbohydrate allowance. Your coach will adjust the "
+            "target or the fat/carb balance before this section applies.", s["body"]))
+    else:
+        meals = max(1, int(getattr(profile, "meals_per_day", 3) or 3))
+        pm = plan.per_meal(meals)
+        story.append(Paragraph(
+            f"Split evenly across <b>{meals} meals</b>, each meal lands near "
+            f"<b>{pm['calories']:,} cal</b> — {pm['protein_g']}g protein, "
+            f"{pm['fat_g']}g fat, {pm['carb_g']}g carbs. Real meals vary; this is a "
+            f"reference point, not a rule.", s["body"]))
 
-    if show_food_anchors:
-        story.append(Spacer(1, 5))
-        story.append(KeepTogether([
-            _anchor_table(plan, s),
-            Spacer(1, 3),
-            Paragraph(
-                "Each column is one way to hit that macro for the whole day using a single "
-                "food. Mix and match in practice — these are yardsticks, not meal plans.",
-                s["small"]),
-        ]))
+        if show_food_anchors:
+            story.append(Spacer(1, 5))
+            story.append(KeepTogether([
+                _anchor_table(plan, s),
+                Spacer(1, 3),
+                Paragraph(
+                    "Each column is one way to hit that macro for the whole day using a "
+                    "single food. Mix and match in practice — these are yardsticks, not "
+                    "meal plans.", s["small"]),
+            ]))
 
     # ---------- Trainer notes (compact, bounded) ----------
     if profile.client_notes.strip():
         story.append(Spacer(1, 4))
-        note = (profile.client_notes.replace("&", "&amp;").replace("<", "&lt;")
-                .replace("\n", "<br/>"))
+        note = esc(profile.client_notes).replace("\n", "<br/>")
         story.append(_callout(f"<b>Coach notes:</b> {note}", s))
 
     # ---------- Disclaimer ----------
@@ -530,11 +547,11 @@ def generate_pdf(profile: ClientProfile, plan: NutritionPlan,
         # ---------- Contact / hand-off ----------
         contact_bits = []
         if trainer_name.strip():
-            contact_bits.append(f"<b>{trainer_name.strip()}</b>")
+            contact_bits.append(f"<b>{esc(trainer_name.strip())}</b>")
         if trainer_email.strip():
-            contact_bits.append(trainer_email.strip())
+            contact_bits.append(esc(trainer_email.strip()))
         if gym_location.strip():
-            contact_bits.append(gym_location.strip())
+            contact_bits.append(esc(gym_location.strip()))
         contact_line = "  •  ".join(contact_bits) if contact_bits else "Your Burn coach"
 
         if review_weeks:
