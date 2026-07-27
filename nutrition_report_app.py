@@ -283,6 +283,12 @@ def card(text: str) -> None:
     st.markdown(f'<div class="bbc-card">{text}</div>', unsafe_allow_html=True)
 
 
+def _batch_template() -> str:
+    """CSV template for batch mode (delegates to the batch module)."""
+    from batch import sample_csv_template
+    return sample_csv_template()
+
+
 # ============================================================
 #  SIDEBAR
 # ============================================================
@@ -310,10 +316,56 @@ with st.sidebar:
         "Food portion anchors", value=True,
         help="Shows what each macro target looks like in real food.",
     )
+    show_sample_day = st.checkbox(
+        "Sample day", value=True,
+        help="An illustrative day split into meals with macro amounts.",
+    )
     show_tracker = st.checkbox(
         "Weekly check-in tracker", value=True,
         help="A blank 4-week weigh-in grid the client fills in by hand.",
     )
+
+    st.divider()
+    with st.expander("📦 Batch mode — many clients at once"):
+        st.caption("Upload a CSV with one row per client to get a ZIP of PDFs. "
+                   "Column order is flexible; headers are matched by name.")
+        st.download_button(
+            "⬇️ Download CSV template",
+            data=_batch_template(),
+            file_name="nutrition_clients_template.csv",
+            mime="text/csv", use_container_width=True,
+        )
+        batch_file = st.file_uploader("Client CSV", type=["csv"],
+                                      key="batch_csv", label_visibility="collapsed")
+        if batch_file is not None and st.button("Build all PDFs", use_container_width=True,
+                                                type="primary"):
+            with st.spinner("Generating reports…"):
+                from batch import process_csv
+                zip_bytes, results = process_csv(
+                    batch_file.getvalue(),
+                    trainer_name=st.session_state.get("trainer_name", ""),
+                    trainer_email=st.session_state.get("trainer_email", ""),
+                    gym_location=st.session_state.get("gym_location", ""),
+                    include_member_guide=include_guide,
+                    show_food_anchors=show_anchors,
+                    show_sample_day=show_sample_day,
+                    show_tracker=show_tracker,
+                )
+            st.session_state["batch_zip"] = zip_bytes
+            st.session_state["batch_results"] = results
+        if st.session_state.get("batch_results"):
+            results = st.session_state["batch_results"]
+            ok = sum(1 for r in results if r["status"] == "ok")
+            st.markdown(f"**{ok} of {len(results)} rows generated.**")
+            for r in results:
+                icon = {"ok": "✅", "skipped": "⚠️", "error": "❌"}.get(r["status"], "•")
+                st.caption(f"{icon} Row {r['row']} — {r['name']}: {r['detail']}")
+            if st.session_state.get("batch_zip"):
+                st.download_button(
+                    "⬇️ Download all PDFs (ZIP)", data=st.session_state["batch_zip"],
+                    file_name="nutrition_reports.zip", mime="application/zip",
+                    use_container_width=True, type="primary",
+                )
 
     st.divider()
     st.markdown("### Load a Saved Client")
@@ -420,6 +472,7 @@ profile = ClientProfile(
     client_notes=st.session_state["in_client_notes"].strip(),
     meals_per_day=int(st.session_state.get("meals_per_day", 3)),
     review_weeks=int(st.session_state.get("review_weeks", 3)),
+    plan_date=datetime.date.today().isoformat(),
 )
 
 errors = validate_profile(profile)
@@ -500,6 +553,13 @@ if plan.has_valid_macros and sum(pcts.values()) > 0:
 
 st.caption(f"Total from macros: **{plan.macro_calorie_total:,.0f} calories**")
 
+h1, h2 = st.columns(2)
+h1.metric("💧 Water", f"{plan.water_oz} oz",
+          help=f"About {plan.water_cups} cups/day (~0.5 oz per lb, plus a bump for "
+               f"very active clients).")
+h2.metric("🌾 Fiber", f"{plan.fiber_g} g",
+          help="About 14g per 1,000 calories — supports digestion and satiety.")
+
 # ---------- Per-meal reference ----------
 meals = st.radio("Meals per day", [3, 4, 5], horizontal=True,
                  key="meals_per_day",
@@ -527,6 +587,21 @@ if plan.has_valid_macros:
                                 unsafe_allow_html=True)
         st.caption("Each is one way to hit that macro for the whole day with a single "
                    "food — yardsticks, not meal plans.")
+
+    with st.expander("📅 A sample day"):
+        day = plan.sample_day(meals)
+        if day:
+            st.caption("One way the day could come together. Swap foods freely — aim to "
+                       "land near the daily totals, not to copy this exactly.")
+            for m in day:
+                st.markdown(
+                    f"**{m['name']}** · {m['calories']:,} cal — "
+                    f"{m['protein_g']}g P · {m['fat_g']}g F · {m['carb_g']}g C  \n"
+                    f"<span style='color:#4A6472;font-size:0.85rem'>{m['idea']}</span>",
+                    unsafe_allow_html=True,
+                )
+        else:
+            st.caption("Sample day is unavailable while the macro split is invalid.")
 else:
     st.caption("Per-meal and food breakdowns are hidden until the macro split is "
                "valid — adjust the slider or calorie target above.")
@@ -609,6 +684,12 @@ st.markdown('<div class="section-header">Export &amp; Share</div>', unsafe_allow
 safe_name = ("".join(c for c in profile.client_name if c.isalnum() or c in " -_")
              .strip().replace(" ", "_") or "Client")
 today = datetime.date.today()
+# Filename date follows the plan date shown on the report, not the download moment.
+try:
+    file_date = (datetime.date.fromisoformat(profile.plan_date)
+                 if profile.plan_date else today)
+except (ValueError, TypeError):
+    file_date = today
 
 review_weeks = st.select_slider(
     "Check in again after", options=[0, 1, 2, 3, 4, 6, 8],
@@ -634,12 +715,13 @@ with x1:
                 trainer_email=st.session_state.get("trainer_email", ""),
                 gym_location=st.session_state.get("gym_location", ""),
                 show_food_anchors=show_anchors,
+                show_sample_day=show_sample_day,
                 show_tracker=show_tracker,
             ).getvalue()
     if st.session_state.get("pdf_bytes"):
         st.download_button(
             "⬇️ Download PDF", data=st.session_state["pdf_bytes"],
-            file_name=f"Nutrition_Report_{safe_name}_{today}.pdf",
+            file_name=f"Nutrition_Report_{safe_name}_{file_date}.pdf",
             mime="application/pdf", use_container_width=True, type="primary",
         )
 with x2:
@@ -679,6 +761,22 @@ with st.expander("📋 Email draft — click the copy icon in the top-right of t
     st.code(email_body, language=None)
 
 st.link_button("📝 Open Client Notes (Basecamp)", BASECAMP_URL, use_container_width=True)
+
+st.components.v1.html(
+    """
+    <button onclick="window.parent.print()" style="
+        width:100%; padding:0.55rem 1rem; border-radius:8px; font-weight:600;
+        font-size:0.95rem; cursor:pointer; color:#0A3D55; background:#FFFFFF;
+        border:1.5px solid #BEE9F7; font-family:inherit;"
+        onmouseover="this.style.borderColor='#00B2E2';this.style.color='#00B2E2';this.style.background='#E8F8FD';"
+        onmouseout="this.style.borderColor='#BEE9F7';this.style.color='#0A3D55';this.style.background='#FFFFFF';">
+        🖨️ Print this page
+    </button>
+    """,
+    height=54,
+)
+st.caption("Tip: the PDF is the client-ready deliverable. Printing the page is handy "
+           "for a quick paper copy of what's on screen.")
 
 if st.button("🗑️ Reset Form", type="secondary", use_container_width=True):
     clear_all()
