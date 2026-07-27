@@ -29,6 +29,17 @@ WEEKS_PER_MONTH = 4.345
 # Threshold below which a low-carb warning is surfaced (item #4)
 LOW_CARB_WARNING_THRESHOLD_G = 50
 
+# ---- Hydration & fiber guidance (educational reference; NOT part of the
+# calorie or macro formulas) ----
+# Baseline water: ~0.5 fl oz per lb of bodyweight is a common practical guideline.
+# A training bump adds a modest allowance for active clients.
+WATER_OZ_PER_LB = 0.5
+WATER_TRAINING_BUMP_OZ = 16  # extra allowance for very/super active
+OZ_PER_CUP = 8
+
+# Fiber: dietary guidance is ~14 g per 1,000 kcal.
+FIBER_G_PER_1000_KCAL = 14
+
 ACTIVITY_MULTIPLIERS = {
     "Sedentary (little to no exercise)": 1.2,
     "Lightly Active (light exercise 1-3 days/week)": 1.375,
@@ -188,6 +199,20 @@ def estimate_timeframe(current_weight: float, goal_weight: float,
     return months, days, round(weeks, 1)
 
 
+def estimate_water_oz(weight_lbs: float, activity: str) -> int:
+    """Daily water guideline in fluid ounces (educational; not a macro formula)."""
+    base = weight_lbs * WATER_OZ_PER_LB
+    if activity in ("Very Active (hard exercise 6-7 days/week)",
+                    "Super Active (very hard exercise + physical job)"):
+        base += WATER_TRAINING_BUMP_OZ
+    return round(base)
+
+
+def estimate_fiber_g(target_calories: int) -> int:
+    """Daily fiber guideline in grams, from ~14 g per 1,000 kcal."""
+    return round(target_calories / 1000 * FIBER_G_PER_1000_KCAL)
+
+
 # ============================================================
 #  FOOD PORTION ANCHORS  (educational reference only)
 # ============================================================
@@ -195,55 +220,67 @@ def estimate_timeframe(current_weight: float, goal_weight: float,
 # abstract gram target into recognizable portions. They are display aids and are
 # deliberately NOT part of any calorie or macro calculation.
 
-# grams of PROTEIN per listed serving
+# grams of PROTEIN per listed serving: (singular, plural, grams_per_serving)
 _PROTEIN_REF = [
-    ("oz cooked chicken breast", 8.0),   # ~8g protein per oz cooked
-    ("large eggs", 6.0),                 # ~6g each
-    ("cup Greek yogurt (nonfat)", 22.0), # ~22g per cup
-    ("scoop whey protein", 24.0),        # ~24g per scoop
+    ("oz cooked chicken breast", "oz cooked chicken breast", 8.0),  # ~8g/oz
+    ("large egg", "large eggs", 6.0),                               # ~6g each
+    ("cup Greek yogurt", "cups Greek yogurt", 22.0),                # ~22g/cup nonfat
+    ("scoop whey protein", "scoops whey protein", 24.0),            # ~24g/scoop
 ]
 # grams of FAT per listed serving
 _FAT_REF = [
-    ("tbsp olive oil", 14.0),
-    ("oz mixed nuts", 15.0),
-    ("medium avocado", 22.0),
-    ("tbsp nut butter", 8.0),
+    ("tbsp olive oil", "tbsp olive oil", 14.0),
+    ("oz mixed nuts", "oz mixed nuts", 15.0),
+    ("medium avocado", "medium avocados", 22.0),
+    ("tbsp nut butter", "tbsp nut butter", 8.0),
 ]
 # grams of CARB per listed serving
 _CARB_REF = [
-    ("cup cooked rice", 45.0),
-    ("medium banana", 27.0),
-    ("slice whole-grain bread", 15.0),
-    ("cup cooked oats", 27.0),
+    ("cup cooked rice", "cups cooked rice", 45.0),
+    ("medium banana", "medium bananas", 27.0),
+    ("slice whole-grain bread", "slices whole-grain bread", 15.0),
+    ("cup cooked oats", "cups cooked oats", 27.0),
 ]
 
 
-def _anchor_line(target_g: float, unit: str, per: float) -> str:
-    """Return e.g. '20 oz cooked chicken breast' for a macro target."""
+def _anchor_line(target_g: float, singular: str, plural: str, per: float) -> str:
+    """Return a friendly portion equivalent, e.g. '~6-7 scoops whey protein'.
+
+    Uses a small range for fractional counts (reads more naturally than a
+    decimal) and a clean '~N' for whole-ish counts.
+    """
     if per <= 0 or target_g <= 0:
-        return f"0 {unit}"
+        return f"0 {plural}"
+
     count = target_g / per
-    # Whole-ish units (eggs, bananas, slices, scoops) read better rounded to int
-    if count >= 10:
-        shown = round(count)
-    elif count >= 1:
-        shown = round(count * 2) / 2  # nearest half
-    else:
-        shown = round(count, 1)
-    shown_str = f"{shown:g}"
-    return f"{shown_str} {unit}"
+
+    if count < 1:
+        if count <= 0.4:
+            return f"about {chr(0xBD)} {singular}"  # ½
+        return f"about 1 {singular}"
+
+    low = int(count)
+    high = low + 1
+    frac = count - low
+
+    if frac < 0.2:
+        return f"~{low} {singular if low == 1 else plural}"
+    if frac > 0.8:
+        return f"~{high} {singular if high == 1 else plural}"
+
+    return f"~{low}-{high} {plural}"
 
 
 def protein_anchors(protein_g: float) -> list[str]:
-    return [_anchor_line(protein_g, unit, per) for unit, per in _PROTEIN_REF]
+    return [_anchor_line(protein_g, s, p, g) for s, p, g in _PROTEIN_REF]
 
 
 def fat_anchors(fat_g: float) -> list[str]:
-    return [_anchor_line(fat_g, unit, per) for unit, per in _FAT_REF]
+    return [_anchor_line(fat_g, s, p, g) for s, p, g in _FAT_REF]
 
 
 def carb_anchors(carb_g: float) -> list[str]:
-    return [_anchor_line(carb_g, unit, per) for unit, per in _CARB_REF]
+    return [_anchor_line(carb_g, s, p, g) for s, p, g in _CARB_REF]
 
 
 # ============================================================
@@ -298,6 +335,8 @@ class NutritionPlan:
     carb_g: float
     fat_pct: float
     timeframe: Optional[tuple[int, int, float]] = None
+    water_oz: int = 0
+    fiber_g: int = 0
     warnings: list[str] = field(default_factory=list)
 
     # ---- derived display values ----
@@ -352,6 +391,10 @@ class NutritionPlan:
     def protein_per_lb(self, weight_lbs: float) -> float:
         return round(self.protein_g / weight_lbs, 2) if weight_lbs else 0.0
 
+    @property
+    def water_cups(self) -> int:
+        return round(self.water_oz / OZ_PER_CUP) if self.water_oz else 0
+
     def per_meal(self, meals: int) -> dict[str, float]:
         """Evenly split daily targets across a meal count (display reference only)."""
         meals = max(1, meals)
@@ -373,6 +416,65 @@ class NutritionPlan:
             "fat": fat_anchors(self.fat_g),
             "carb": carb_anchors(self.carb_g),
         }
+
+    def sample_day(self, meals: int) -> list[dict]:
+        """Build an illustrative day: split targets across named meals.
+
+        Returns a list of {name, protein_g, fat_g, carb_g, calories, idea}.
+        This is a starting-point example, not a prescription, and uses only the
+        already-computed macro targets — no new calculation of calories/macros.
+        """
+        if not self.has_valid_macros:
+            return []
+
+        meals = max(1, min(meals, 5))
+        names_by_count = {
+            1: ["All-day total"],
+            2: ["Meal 1", "Meal 2"],
+            3: ["Breakfast", "Lunch", "Dinner"],
+            4: ["Breakfast", "Lunch", "Snack", "Dinner"],
+            5: ["Breakfast", "Snack", "Lunch", "Snack", "Dinner"],
+        }
+        # Rough, sensible distribution of the day's calories across slots.
+        weights_by_count = {
+            1: [1.0],
+            2: [0.5, 0.5],
+            3: [0.3, 0.35, 0.35],
+            4: [0.28, 0.32, 0.12, 0.28],
+            5: [0.25, 0.1, 0.28, 0.1, 0.27],
+        }
+        ideas_by_count = {
+            3: ["Eggs + oats + fruit",
+                "Lean protein + rice + vegetables",
+                "Protein + potato/grain + salad"],
+            4: ["Eggs + oats + fruit",
+                "Lean protein + rice + vegetables",
+                "Greek yogurt + nuts",
+                "Protein + potato/grain + salad"],
+            5: ["Eggs + oats + fruit",
+                "Protein shake + banana",
+                "Lean protein + rice + vegetables",
+                "Greek yogurt + berries",
+                "Protein + potato/grain + salad"],
+        }
+        ideas_by_count[1] = ["Spread your targets across the day"]
+        ideas_by_count[2] = ["Protein + carbs + veg", "Protein + carbs + healthy fat"]
+
+        names = names_by_count[meals]
+        weights = weights_by_count[meals]
+        ideas = ideas_by_count[meals]
+
+        day = []
+        for name, w, idea in zip(names, weights, ideas):
+            day.append({
+                "name": name,
+                "protein_g": round(self.protein_g * w),
+                "fat_g": round(self.fat_g * w),
+                "carb_g": round(self.carb_g * w),
+                "calories": round(self.target_calories * w),
+                "idea": idea,
+            })
+        return day
 
 
 # ============================================================
@@ -412,6 +514,8 @@ def build_plan(profile: ClientProfile, fat_carb_balance: int = 50) -> NutritionP
         carb_g=carb_g,
         fat_pct=fat_pct,
         timeframe=timeframe,
+        water_oz=estimate_water_oz(profile.weight_lbs, profile.activity_level),
+        fiber_g=estimate_fiber_g(target_calories),
     )
     plan.warnings = collect_warnings(profile, plan)
     return plan
