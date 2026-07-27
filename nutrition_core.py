@@ -189,6 +189,64 @@ def estimate_timeframe(current_weight: float, goal_weight: float,
 
 
 # ============================================================
+#  FOOD PORTION ANCHORS  (educational reference only)
+# ============================================================
+# Approximate grams of the target macro per common serving. These translate an
+# abstract gram target into recognizable portions. They are display aids and are
+# deliberately NOT part of any calorie or macro calculation.
+
+# grams of PROTEIN per listed serving
+_PROTEIN_REF = [
+    ("oz cooked chicken breast", 8.0),   # ~8g protein per oz cooked
+    ("large eggs", 6.0),                 # ~6g each
+    ("cup Greek yogurt (nonfat)", 22.0), # ~22g per cup
+    ("scoop whey protein", 24.0),        # ~24g per scoop
+]
+# grams of FAT per listed serving
+_FAT_REF = [
+    ("tbsp olive oil", 14.0),
+    ("oz mixed nuts", 15.0),
+    ("medium avocado", 22.0),
+    ("tbsp nut butter", 8.0),
+]
+# grams of CARB per listed serving
+_CARB_REF = [
+    ("cup cooked rice", 45.0),
+    ("medium banana", 27.0),
+    ("slice whole-grain bread", 15.0),
+    ("cup cooked oats", 27.0),
+]
+
+
+def _anchor_line(target_g: float, unit: str, per: float) -> str:
+    """Return e.g. '20 oz cooked chicken breast' for a macro target."""
+    if per <= 0 or target_g <= 0:
+        return f"0 {unit}"
+    count = target_g / per
+    # Whole-ish units (eggs, bananas, slices, scoops) read better rounded to int
+    if count >= 10:
+        shown = round(count)
+    elif count >= 1:
+        shown = round(count * 2) / 2  # nearest half
+    else:
+        shown = round(count, 1)
+    shown_str = f"{shown:g}"
+    return f"{shown_str} {unit}"
+
+
+def protein_anchors(protein_g: float) -> list[str]:
+    return [_anchor_line(protein_g, unit, per) for unit, per in _PROTEIN_REF]
+
+
+def fat_anchors(fat_g: float) -> list[str]:
+    return [_anchor_line(fat_g, unit, per) for unit, per in _FAT_REF]
+
+
+def carb_anchors(carb_g: float) -> list[str]:
+    return [_anchor_line(carb_g, unit, per) for unit, per in _CARB_REF]
+
+
+# ============================================================
 #  RESULT CONTAINERS
 # ============================================================
 
@@ -206,6 +264,10 @@ class ClientProfile:
     primary_goal: str = "Fat Loss"
     fat_loss_type: Optional[str] = "Moderate"
     client_notes: str = ""
+    meals_per_day: int = 3
+    # Optional hand-off details (used on the PDF; safe to leave blank)
+    review_weeks: int = 3
+    plan_date: str = ""  # ISO date string; blank -> today at render time
 
     @property
     def height_display(self) -> str:
@@ -280,6 +342,28 @@ class NutritionPlan:
 
     def protein_per_lb(self, weight_lbs: float) -> float:
         return round(self.protein_g / weight_lbs, 2) if weight_lbs else 0.0
+
+    def per_meal(self, meals: int) -> dict[str, float]:
+        """Evenly split daily targets across a meal count (display reference only)."""
+        meals = max(1, meals)
+        return {
+            "calories": round(self.target_calories / meals),
+            "protein_g": round(self.protein_g / meals),
+            "fat_g": round(self.fat_g / meals),
+            "carb_g": round(self.carb_g / meals),
+        }
+
+    def food_anchors(self) -> dict[str, list[str]]:
+        """Plain-language portion equivalents for each macro target.
+
+        Educational reference only — these do not feed back into any calorie or
+        macro calculation. Values are rounded to sensible kitchen quantities.
+        """
+        return {
+            "protein": protein_anchors(self.protein_g),
+            "fat": fat_anchors(self.fat_g),
+            "carb": carb_anchors(self.carb_g),
+        }
 
 
 # ============================================================
