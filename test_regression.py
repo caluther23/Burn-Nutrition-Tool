@@ -109,3 +109,113 @@ for s in [0, 50, 100]:
     fn, cn = split_fat_and_carbs(tc, pg, fat_pct_from_slider(s))
     print(f"\nslider={s}: OLD fat {fo}g carb {co}g | NEW fat {fn}g carb {cn}g")
     print(f"   NEW macro cal total: {pg*4 + fn*9 + cn*4:.0f} (target {tc})")
+
+
+# ---------- Display-helper tests (added in deep-dive audit) ----------
+def test_display_helpers():
+    from nutrition_core import ClientProfile, build_plan
+    print("\n=== Display helper checks ===")
+    fails = 0
+
+    # per_meal sums back to (near) the daily total
+    p = ClientProfile(primary_goal="Fat Loss", fat_loss_type="Moderate",
+                      weight_lbs=180.0, goal_weight_lbs=160.0)
+    plan = build_plan(p, 50)
+    for meals in (3, 4, 5):
+        pm = plan.per_meal(meals)
+        if pm["protein_g"] * meals > plan.protein_g + meals or pm["protein_g"] < 0:
+            fails += 1
+    print(f"per_meal split: {'OK' if fails == 0 else 'FAIL'}")
+
+    # has_valid_macros catches negative carbs
+    neg = ClientProfile(gender="Female", age=60, weight_lbs=250.0, feet=4, inches=10,
+                        goal_weight_lbs=245.0, primary_goal="Fat Loss",
+                        fat_loss_type="Aggressive",
+                        activity_level="Sedentary (little to no exercise)")
+    negplan = build_plan(neg, 0)
+    ok = (not negplan.has_valid_macros) and negplan.carb_g < 0
+    print(f"has_valid_macros flags negative carbs: {'OK' if ok else 'FAIL'}")
+    if not ok:
+        fails += 1
+
+    # macro_percentages returns zeros (not negatives) when invalid
+    mp = negplan.macro_percentages()
+    ok2 = all(v == 0.0 for v in mp.values())
+    print(f"macro_percentages zeroed when invalid: {'OK' if ok2 else 'FAIL'}")
+    if not ok2:
+        fails += 1
+
+    # food anchors never negative
+    valid_plan = build_plan(p, 50)
+    anchors = valid_plan.food_anchors()
+    ok3 = all(not line.strip().startswith("-") for col in anchors.values() for line in col)
+    print(f"food anchors non-negative: {'OK' if ok3 else 'FAIL'}")
+    if not ok3:
+        fails += 1
+
+    print(f"\nDisplay helper failures: {fails}")
+    return fails
+
+
+if __name__ == "__main__" or True:
+    test_display_helpers()
+
+
+def test_tier2_features():
+    """Coverage for hydration, fiber, sample day, and batch mode."""
+    from nutrition_core import ClientProfile, build_plan, estimate_water_oz, estimate_fiber_g
+    print("\n=== Tier 2 feature checks ===")
+    fails = 0
+
+    p = ClientProfile(weight_lbs=168.0, goal_weight_lbs=145.0,
+                      primary_goal="Fat Loss", fat_loss_type="Moderate")
+    plan = build_plan(p, 50)
+
+    # Hydration scales with weight; fiber with calories
+    if not (plan.water_oz > 0 and plan.fiber_g > 0):
+        fails += 1
+    print(f"hydration/fiber positive: {'OK' if plan.water_oz>0 and plan.fiber_g>0 else 'FAIL'}")
+
+    # Very active gets a water bump
+    pv = ClientProfile(weight_lbs=168.0, goal_weight_lbs=145.0, primary_goal="Fat Loss",
+                       fat_loss_type="Moderate",
+                       activity_level="Very Active (hard exercise 6-7 days/week)")
+    planv = build_plan(pv, 50)
+    bump_ok = planv.water_oz > plan.water_oz
+    print(f"very-active water bump: {'OK' if bump_ok else 'FAIL'}")
+    if not bump_ok:
+        fails += 1
+
+    # Sample day totals reconcile to daily targets (within rounding)
+    day = plan.sample_day(4)
+    tot_cal = sum(m["calories"] for m in day)
+    recon = abs(tot_cal - plan.target_calories) <= len(day)
+    print(f"sample day reconciles: {'OK' if recon else 'FAIL'} ({tot_cal} vs {plan.target_calories})")
+    if not recon:
+        fails += 1
+
+    # Sample day empty when macros invalid
+    neg = ClientProfile(gender="Female", age=60, weight_lbs=250.0, feet=4, inches=10,
+                        goal_weight_lbs=245.0, primary_goal="Fat Loss",
+                        fat_loss_type="Aggressive",
+                        activity_level="Sedentary (little to no exercise)")
+    empty_ok = build_plan(neg, 0).sample_day(4) == []
+    print(f"sample day empty when invalid: {'OK' if empty_ok else 'FAIL'}")
+    if not empty_ok:
+        fails += 1
+
+    # Batch mode processes a small CSV
+    from batch import process_csv
+    csv = ("name,weight,goal_weight,goal,intensity\n"
+           "Alice,150,140,Fat Loss,Low\nBob,200,215,Muscle Gain,")
+    zb, res = process_csv(csv.encode())
+    batch_ok = sum(1 for r in res if r["status"] == "ok") == 2 and len(zb) > 0
+    print(f"batch mode 2 clients: {'OK' if batch_ok else 'FAIL'}")
+    if not batch_ok:
+        fails += 1
+
+    print(f"\nTier 2 failures: {fails}")
+    return fails
+
+
+test_tier2_features()
