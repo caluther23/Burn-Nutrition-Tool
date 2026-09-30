@@ -429,19 +429,25 @@ with col2:
                     step=0.1, format="%.1f")
     st.selectbox("Activity Level", ACTIVITY_OPTIONS, key="in_activity_level")
 
-# --- Goal, with intensity rendered ONLY for Fat Loss ---
+# --- Goal + intensity ---
+# Intensity is ALWAYS rendered (disabled unless Fat Loss). A widget that skips a
+# run loses its state in Streamlit, which used to reset it to Moderate and shift
+# the layout whenever the goal changed. The profile below still passes None for
+# non-Fat-Loss goals, so the math is unaffected.
 goal_col, intensity_col = st.columns(2)
 with goal_col:
     st.selectbox("Primary Goal", GOALS, key="in_primary_goal")
 
 selected_goal = st.session_state["in_primary_goal"]
+is_fat_loss = selected_goal == "Fat Loss"
 
 with intensity_col:
-    if selected_goal == "Fat Loss":
-        st.selectbox(
-            "Fat Loss Intensity", FAT_LOSS_INTENSITIES, key="in_fat_loss_type",
-            help="Low = 90% of TDEE  •  Moderate = 85%  •  Aggressive = 80%",
-        )
+    st.selectbox(
+        "Fat Loss Intensity", FAT_LOSS_INTENSITIES, key="in_fat_loss_type",
+        disabled=not is_fat_loss,
+        help=("Low = 90% of TDEE  •  Moderate = 85%  •  Aggressive = 80%" if is_fat_loss
+              else "Only applies when the Primary Goal is Fat Loss."),
+    )
 
 st.text_area(
     "Trainer Notes", key="in_client_notes",
@@ -459,8 +465,7 @@ profile = ClientProfile(
     goal_weight_lbs=st.session_state["in_goal_weight_lbs"],
     activity_level=st.session_state["in_activity_level"],
     primary_goal=selected_goal,
-    fat_loss_type=(st.session_state["in_fat_loss_type"]
-                   if selected_goal == "Fat Loss" else None),
+    fat_loss_type=st.session_state["in_fat_loss_type"] if is_fat_loss else None,
     client_notes=st.session_state["in_client_notes"].strip(),
     meals_per_day=int(st.session_state["meals_per_day"]),
     review_weeks=int(st.session_state["review_weeks"]),

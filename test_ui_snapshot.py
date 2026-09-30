@@ -153,7 +153,18 @@ def new_app() -> AppTest:
     return AppTest.from_file(APP, default_timeout=60).run()
 
 
-BEHAVIOR_CHECKS: list = []
+def check_intensity_survives_goal_change() -> str | None:
+    at = new_app()
+    at.selectbox(key="in_fat_loss_type").select("Aggressive").run()
+    at.selectbox(key="in_primary_goal").select("Maintenance").run()
+    if not at.selectbox(key="in_fat_loss_type").disabled:
+        return "intensity should be disabled for Maintenance"
+    at.selectbox(key="in_primary_goal").select("Fat Loss").run()
+    got = at.selectbox(key="in_fat_loss_type").value
+    return None if got == "Aggressive" else f"intensity reset to {got!r}"
+
+
+BEHAVIOR_CHECKS: list = [check_intensity_survives_goal_change]
 
 
 def main() -> int:
