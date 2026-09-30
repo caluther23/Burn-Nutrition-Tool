@@ -108,13 +108,13 @@ st.markdown(f"""
 
     /* ---------- Typography ---------- */
     .bbc-title {{
-        font-size: 2.3rem; font-weight: 800; color: {INK};
+        font-size: 2.3rem; font-weight: 800; color: {INK} !important;
         letter-spacing: -0.02em; margin: 0.1rem 0 0.15rem 0; line-height: 1.12;
     }}
-    .bbc-sub {{ font-size: 1.0rem; color: {INK_SOFT}; margin-bottom: 0.6rem; }}
+    .bbc-sub {{ font-size: 1.0rem; color: {INK_SOFT} !important; margin-bottom: 0.6rem; }}
 
     .section-header {{
-        font-size: 1.15rem; font-weight: 700; color: {INK};
+        font-size: 1.15rem; font-weight: 700; color: {INK} !important;
         margin-top: 1.7rem; margin-bottom: 0.7rem;
         border-bottom: 3px solid {BRAND_BLUE}; padding-bottom: 0.35rem;
     }}
@@ -197,9 +197,6 @@ st.markdown(f"""
     }}
     .bbc-card, .bbc-card p, .bbc-card strong {{ color: {INK} !important; }}
     .disclaimer, .disclaimer strong {{ color: {INK_SOFT} !important; }}
-    .bbc-title {{ color: {INK} !important; }}
-    .bbc-sub {{ color: {INK_SOFT} !important; }}
-    .section-header {{ color: {INK} !important; }}
     .macro-bar {{
         display: flex; width: 100%; height: 34px; border-radius: 7px;
         overflow: hidden; margin: 0.5rem 0 0.35rem 0;
@@ -210,11 +207,10 @@ st.markdown(f"""
         white-space: nowrap; overflow: hidden;
     }}
     .disclaimer {{
-        font-size: 0.83rem; color: {INK_SOFT}; font-style: italic;
+        font-size: 0.83rem; font-style: italic;
         border-left: 3px solid {BLUE_LINE}; padding: 0.5rem 0 0.5rem 0.85rem;
         margin-top: 1.4rem;
     }}
-    .stCaption, div[data-testid="stCaptionContainer"] p {{ color: {INK_SOFT}; }}
     hr {{ border-color: {BLUE_LINE}; }}
 
     /* ---------- Print ---------- */
@@ -232,27 +228,20 @@ st.markdown(f"""
 #  STATE HELPERS
 # ============================================================
 
+# Input widgets are keyed "in_<ClientProfile field>" and seeded from the
+# ClientProfile defaults, so the form and the data model can never disagree.
+# meals_per_day / review_weeks are hand-off widgets keyed without the prefix;
+# plan_date is derived at render time and has no widget.
+UNPREFIXED_FIELDS = {"meals_per_day", "review_weeks"}
+_profile_defaults = ClientProfile().to_dict()
 WIDGET_DEFAULTS = {
-    "in_client_name": "",
-    "in_age": 30,
-    "in_gender": "Male",
-    "in_feet": 5,
-    "in_inches": 8,
-    "in_weight_lbs": 180.0,
-    "in_goal_weight_lbs": 160.0,
-    "in_activity_level": ACTIVITY_OPTIONS[2],
-    "in_primary_goal": "Fat Loss",
-    "in_fat_loss_type": "Moderate",
-    "in_client_notes": "",
+    (k if k in UNPREFIXED_FIELDS else f"in_{k}"): v
+    for k, v in _profile_defaults.items() if k != "plan_date"
 }
+WIDGET_DEFAULTS["fat_carb_slider"] = 50   # centered = 30% fat (see nutrition_core)
 
 for _key, _default in WIDGET_DEFAULTS.items():
     st.session_state.setdefault(_key, _default)
-
-# Handoff widgets are keyed without the in_ prefix; initialize once so the
-# profile (built before these widgets render) reads a stable value.
-st.session_state.setdefault("meals_per_day", 3)
-st.session_state.setdefault("review_weeks", 3)
 
 
 def store_profile(profile: ClientProfile) -> None:
@@ -266,14 +255,12 @@ def clear_all() -> None:
 
 def apply_profile_to_widgets(profile: ClientProfile) -> None:
     """Push a loaded profile into the live input widgets."""
-    # These two live on un-prefixed widget keys, not in_<field>.
-    unprefixed = {"meals_per_day", "review_weeks"}
     for key, value in profile.to_dict().items():
         if key == "fat_loss_type" and value is None:
             value = "Moderate"
         if key == "plan_date":
             continue  # derived at render time; not a widget
-        if key in unprefixed:
+        if key in UNPREFIXED_FIELDS:
             st.session_state[key] = value
         else:
             st.session_state[f"in_{key}"] = value
@@ -281,6 +268,11 @@ def apply_profile_to_widgets(profile: ClientProfile) -> None:
 
 def card(text: str) -> None:
     st.markdown(f'<div class="bbc-card">{text}</div>', unsafe_allow_html=True)
+
+
+def section(title: str, extra_html: str = "") -> None:
+    st.markdown(f'<div class="section-header">{title}</div>{extra_html}',
+                unsafe_allow_html=True)
 
 
 def _batch_template() -> str:
@@ -295,7 +287,7 @@ def _batch_template() -> str:
 
 with st.sidebar:
     if LOGO_PATH.exists():
-        st.image(str(LOGO_PATH), use_container_width=True)
+        st.image(str(LOGO_PATH), width="stretch")
 
     st.markdown("### Trainer & Gym")
     st.text_input("Trainer name", key="trainer_name",
@@ -333,11 +325,11 @@ with st.sidebar:
             "⬇️ Download CSV template",
             data=_batch_template(),
             file_name="nutrition_clients_template.csv",
-            mime="text/csv", use_container_width=True,
+            mime="text/csv", width="stretch",
         )
         batch_file = st.file_uploader("Client CSV", type=["csv"],
                                       key="batch_csv", label_visibility="collapsed")
-        if batch_file is not None and st.button("Build all PDFs", use_container_width=True,
+        if batch_file is not None and st.button("Build all PDFs", width="stretch",
                                                 type="primary"):
             with st.spinner("Generating reports…"):
                 from batch import process_csv
@@ -364,7 +356,7 @@ with st.sidebar:
                 st.download_button(
                     "⬇️ Download all PDFs (ZIP)", data=st.session_state["batch_zip"],
                     file_name="nutrition_reports.zip", mime="application/zip",
-                    use_container_width=True, type="primary",
+                    width="stretch", type="primary",
                 )
 
     st.divider()
@@ -403,7 +395,7 @@ with head_l:
                 unsafe_allow_html=True)
 with head_r:
     if LOGO_PATH.exists():
-        st.image(str(LOGO_PATH), use_container_width=True)
+        st.image(str(LOGO_PATH), width="stretch")
 
 st.markdown(
     f'<hr style="border:none;border-top:3px solid {BRAND_BLUE};'
@@ -414,7 +406,7 @@ st.markdown(
 #  INPUTS  (live-reactive — no form, so the UI adapts as you type)
 # ============================================================
 
-st.markdown('<div class="section-header">Client Information</div>', unsafe_allow_html=True)
+section("Client Information")
 
 st.text_input("Client Name (First & Last)", key="in_client_name",
               placeholder="e.g., John Smith")
@@ -470,8 +462,8 @@ profile = ClientProfile(
     fat_loss_type=(st.session_state["in_fat_loss_type"]
                    if selected_goal == "Fat Loss" else None),
     client_notes=st.session_state["in_client_notes"].strip(),
-    meals_per_day=int(st.session_state.get("meals_per_day", 3)),
-    review_weeks=int(st.session_state.get("review_weeks", 3)),
+    meals_per_day=int(st.session_state["meals_per_day"]),
+    review_weeks=int(st.session_state["review_weeks"]),
     plan_date=datetime.date.today().isoformat(),
 )
 
@@ -488,10 +480,9 @@ store_profile(profile)
 #  RESULTS
 # ============================================================
 
-st.markdown('<div class="section-header">Daily Energy Targets</div>'
-            '<div id="energy-row"></div>', unsafe_allow_html=True)
+section("Daily Energy Targets", '<div id="energy-row"></div>')
 
-balance = st.session_state.get("fat_carb_slider", 50)
+balance = st.session_state["fat_carb_slider"]
 plan = build_plan(profile, balance)
 
 e1, e2, e3 = st.columns(3)
@@ -515,13 +506,13 @@ if plan.daily_calorie_delta:
     )
 
 # ---------- Macros ----------
-st.markdown('<div class="section-header">Macronutrient Targets</div>', unsafe_allow_html=True)
+section("Macronutrient Targets")
 
 st.markdown("**Fat / Carb Balance**")
 sl1, sl2, sl3 = st.columns([1, 8, 1])
 sl1.markdown("**🥑 Fat**")
 with sl2:
-    st.slider("Fat / Carb Balance", 0, 100, 50, 5,
+    st.slider("Fat / Carb Balance", 0, 100, step=5,
               key="fat_carb_slider", label_visibility="collapsed")
 sl3.markdown("**🍚 Carbs**")
 
@@ -612,8 +603,7 @@ for warning in plan.warnings:
 # ---------- Timeframe ----------
 if plan.timeframe:
     months, days, weeks = plan.timeframe
-    st.markdown('<div class="section-header">Goal Progress Estimate</div>',
-                unsafe_allow_html=True)
+    section("Goal Progress Estimate")
     t1, t2, t3 = st.columns(3)
     t1.metric("Goal Weight", f"{profile.goal_weight_lbs:g} lbs")
     t2.metric("Change Needed",
@@ -627,9 +617,10 @@ if plan.timeframe:
     )
 
 # ---------- Reasoning ----------
-st.markdown('<div class="section-header">Professional Reasoning</div>', unsafe_allow_html=True)
+section("Professional Reasoning")
+why_html = build_why_text(profile, plan)
 st.markdown("**Why these calories?**")
-st.markdown(build_why_text(profile, plan).replace("<b>", "**").replace("</b>", "**"))
+st.markdown(why_html.replace("<b>", "**").replace("</b>", "**"))
 
 st.markdown("**Macro strategy**")
 anchor = "goal weight" if profile.primary_goal == "Fat Loss" else "current bodyweight"
@@ -679,7 +670,7 @@ st.markdown(
 )
 
 # ---------- Export ----------
-st.markdown('<div class="section-header">Export &amp; Share</div>', unsafe_allow_html=True)
+section("Export &amp; Share")
 
 safe_name = ("".join(c for c in profile.client_name if c.isalnum() or c in " -_")
              .strip().replace(" ", "_") or "Client")
@@ -706,7 +697,7 @@ if not profile.client_name:
 
 x1, x2 = st.columns(2)
 with x1:
-    if st.button("📄 Build PDF Report", use_container_width=True, type="primary"):
+    if st.button("📄 Build PDF Report", width="stretch", type="primary"):
         with st.spinner("Building PDF…"):
             st.session_state["pdf_bytes"] = generate_pdf(
                 profile, plan,
@@ -722,19 +713,19 @@ with x1:
         st.download_button(
             "⬇️ Download PDF", data=st.session_state["pdf_bytes"],
             file_name=f"Nutrition_Report_{safe_name}_{file_date}.pdf",
-            mime="application/pdf", use_container_width=True, type="primary",
+            mime="application/pdf", width="stretch", type="primary",
         )
 with x2:
     st.download_button(
         "💾 Save Client Profile (.json)",
         data=json.dumps(profile.to_dict(), indent=2),
         file_name=f"Profile_{safe_name}.json",
-        mime="application/json", use_container_width=True, type="secondary",
+        mime="application/json", width="stretch", type="secondary",
         help="Reload later from the sidebar to regenerate or update this plan.",
     )
 
 macro_line = f"Protein {plan.protein_g}g | Fat {plan.fat_g:g}g | Carbs {plan.carb_g:g}g"
-why_plain = build_why_text(profile, plan).replace("<b>", "").replace("</b>", "")
+why_plain = why_html.replace("<b>", "").replace("</b>", "")
 signature = st.session_state.get("trainer_name", "").strip() or "[Your Name]"
 
 email_body = f"""Subject: Your Personalized Nutrition Plan
@@ -760,9 +751,10 @@ Burn Boot Camp"""
 with st.expander("📋 Email draft — click the copy icon in the top-right of the box"):
     st.code(email_body, language=None)
 
-st.link_button("📝 Open Client Notes (Basecamp)", BASECAMP_URL, use_container_width=True)
+st.link_button("📝 Open Client Notes (Basecamp)", BASECAMP_URL, width="stretch")
 
-st.components.v1.html(
+# st.iframe replaces st.components.v1.html, which Streamlit is removing.
+st.iframe(
     """
     <button onclick="window.parent.print()" style="
         width:100%; padding:0.55rem 1rem; border-radius:8px; font-weight:600;
@@ -778,6 +770,6 @@ st.components.v1.html(
 st.caption("Tip: the PDF is the client-ready deliverable. Printing the page is handy "
            "for a quick paper copy of what's on screen.")
 
-if st.button("🗑️ Reset Form", type="secondary", use_container_width=True):
+if st.button("🗑️ Reset Form", type="secondary", width="stretch"):
     clear_all()
     st.rerun()
