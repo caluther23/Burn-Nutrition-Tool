@@ -11,8 +11,12 @@ BMR/TDEE calculations and goal-specific macro targets.
 | `nutrition_core.py` | All formulas + data models. No UI code — testable in isolation. |
 | `pdf_report.py` | Two-page branded PDF generation |
 | `burn_boot_camp_logo.png` | Logo (must sit beside the .py files) |
+| `batch.py` | Batch mode: one CSV of clients in, a ZIP of PDFs out |
+| `profile_loader.py` | Checks an uploaded profile JSON before it reaches the form (UI helper, no formulas) |
 | `requirements.txt` | Dependencies |
 | `test_regression.py` | Proves the refactor preserves the original math |
+| `test_ui_snapshot.py` | Proves UI changes don't alter any displayed number (+ interaction checks) |
+| `ui_baseline.json` | Recorded screen output the UI test compares against |
 
 ## Run locally
 
@@ -34,6 +38,22 @@ python test_regression.py
 
 Sweeps 17,500 input combinations against the original implementations.
 Expected output: 0 mismatches on BMR, TDEE, calories, protein, and timeframe.
+
+---
+
+### Verify the screen
+
+```bash
+python test_ui_snapshot.py
+```
+
+Runs the app headlessly for 25 client profiles and compares every metric,
+warning, error, caption, macro-bar percentage, food-anchor and sample-day line,
+and the email draft against `ui_baseline.json`. Also checks interactions:
+intensity survives a goal change, Reset keeps trainer details, bad profile
+files are sanitized, and a PDF built before an input change is never offered
+for download. Expected: 0 mismatches. Regenerate the baseline with `--update`
+only after reviewing an intended change.
 
 ---
 
@@ -104,6 +124,25 @@ baseline and the range is symmetric. To revert, edit `BASELINE_FAT_PCT` and
 - **Protein per lb** readout
 - **Print stylesheet** — hides chrome when printing the page directly
 - Escaped HTML in trainer notes, filename sanitizing, PDF metadata
+
+## Front-end refresh (UI only; no formula changes)
+
+- **Fat Loss Intensity** is always shown, greyed out for other goals, and keeps
+  its setting when the goal changes (it used to reset to Moderate).
+- **Loading a saved client** can no longer crash the app: out-of-range or
+  unknown values (including meals per day and check-in weeks) are corrected
+  and listed in the sidebar.
+- **Reset Form** asks first, keeps trainer name/email, gym, PDF content
+  settings and batch results, and no longer reloads the last uploaded file.
+- **Validation errors** appear right under the goal fields.
+- **PDF download** is withdrawn if any input changes after building it.
+- **Slider** reads out the fat % directly (same positions and mapping).
+- **Phones**: sidebar starts closed; metric rows, water/fiber, header and
+  height fields stay side by side.
+- Daily Target highlight, uppercase metric labels and secondary-button borders
+  now render as designed (their CSS never matched newer Streamlit markup).
+- Print button moved to `st.iframe` (Streamlit is removing
+  `st.components.v1.html`), with no scrollbar and the app's font.
 
 ## Safety note
 

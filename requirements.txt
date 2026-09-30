@@ -1,2 +1,2 @@
-streamlit>=1.36
+streamlit>=1.57   # st.iframe, keyed containers, width=, popover; tested on 1.57
 reportlab>=4.0

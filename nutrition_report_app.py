@@ -290,10 +290,6 @@ for _key, _default in WIDGET_DEFAULTS.items():
     st.session_state.setdefault(_key, _default)
 
 
-def store_profile(profile: ClientProfile) -> None:
-    st.session_state["profile_data"] = profile.to_dict()
-
-
 # The uploader's key includes a counter. Bumping it on reset gives a fresh,
 # empty uploader; otherwise the old file stays attached and gets reloaded.
 st.session_state.setdefault("_uploader_nonce", 0)
@@ -539,7 +535,6 @@ if errors:
     st.info("Your results will appear here once the entry flagged above is fixed.")
     st.stop()
 
-store_profile(profile)
 
 
 # ============================================================
