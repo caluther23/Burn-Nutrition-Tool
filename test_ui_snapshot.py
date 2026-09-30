@@ -231,8 +231,32 @@ def check_profile_loader() -> str | None:
     return None
 
 
+def check_stale_pdf_not_offered() -> str | None:
+    stale_msg = "Inputs changed since the last PDF was built"
+
+    def pdf_downloads(at):
+        return [d for d in at.get("download_button") if "Download PDF" in d.proto.label]
+
+    for change in ("weight", "trainer_email", "anchors"):
+        at = new_app()
+        next(b for b in at.button if "Build PDF" in b.label).click().run()
+        if not pdf_downloads(at):
+            return "no PDF download after building"
+        if change == "weight":
+            at.number_input(key="in_weight_lbs").set_value(190.0).run()
+        elif change == "trainer_email":
+            at.text_input(key="trainer_email").input("new@example.com").run()
+        else:
+            next(c for c in at.checkbox if c.label == "Food portion anchors").uncheck().run()
+        if pdf_downloads(at):
+            return f"stale PDF still offered after {change} change"
+        if not any(stale_msg in c.value for c in at.caption):
+            return f"no stale-PDF notice after {change} change"
+    return None
+
+
 BEHAVIOR_CHECKS: list = [check_intensity_survives_goal_change, check_reset_keeps_trainer,
-                         check_profile_loader]
+                         check_profile_loader, check_stale_pdf_not_offered]
 
 
 def main() -> int:

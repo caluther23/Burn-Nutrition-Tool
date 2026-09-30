@@ -466,12 +466,6 @@ with intensity_col:
               else "Only applies when the Primary Goal is Fat Loss."),
     )
 
-st.text_area(
-    "Trainer Notes", key="in_client_notes",
-    placeholder="Dietary modifications, medical considerations, training schedule, "
-                "food preferences, travel weeks...",
-)
-
 profile = ClientProfile(
     client_name=st.session_state["in_client_name"].strip(),
     age=st.session_state["in_age"],
@@ -489,10 +483,19 @@ profile = ClientProfile(
     plan_date=datetime.date.today().isoformat(),
 )
 
+# Errors sit directly under the weight/goal fields they refer to.
 errors = validate_profile(profile)
 for err in errors:
     st.error(err)
+
+st.text_area(
+    "Trainer Notes", key="in_client_notes",
+    placeholder="Dietary modifications, medical considerations, training schedule, "
+                "food preferences, travel weeks...",
+)
+
 if errors:
+    st.info("Your results will appear here once the entry flagged above is fixed.")
     st.stop()
 
 store_profile(profile)
@@ -717,6 +720,14 @@ if review_weeks:
 if not profile.client_name:
     st.caption("Add a client name above to personalize the report and file names.")
 
+# Everything the PDF depends on. A built PDF is only offered for download while
+# these still match, so a trainer can't send a report with outdated numbers.
+pdf_inputs = json.dumps([
+    profile.to_dict(), balance, include_guide, show_anchors, show_sample_day,
+    show_tracker, *(st.session_state.get(k, "")
+                    for k in ("trainer_name", "trainer_email", "gym_location")),
+])
+
 x1, x2 = st.columns(2)
 with x1:
     if st.button("📄 Build PDF Report", width="stretch", type="primary"):
@@ -731,7 +742,12 @@ with x1:
                 show_sample_day=show_sample_day,
                 show_tracker=show_tracker,
             ).getvalue()
-    if st.session_state.get("pdf_bytes"):
+            st.session_state["pdf_inputs"] = pdf_inputs
+    pdf_is_current = st.session_state.get("pdf_inputs") == pdf_inputs
+    if st.session_state.get("pdf_bytes") and not pdf_is_current:
+        st.caption("Inputs changed since the last PDF was built. Build it again to "
+                   "download the updated report.")
+    elif st.session_state.get("pdf_bytes"):
         st.download_button(
             "⬇️ Download PDF", data=st.session_state["pdf_bytes"],
             file_name=f"Nutrition_Report_{safe_name}_{file_date}.pdf",
