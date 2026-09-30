@@ -1,0 +1,3037 @@
+{
+  "fatloss_low": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,443 cal",
+        "-271 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "176g",
+        "",
+        "0.98g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "81.4g",
+        "",
+        "733 calories"
+      ],
+      [
+        "Carbs",
+        "251.6g",
+        "",
+        "1,006 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "34 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "160 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "20 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "6 mo, 4 d",
+        "",
+        "About 26.7 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "29"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "41"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,443\nMacros: Protein 176g | Fat 81.4g | Carbs 251.6g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a Low fat loss approach, calories are set at 90% of your TDEE — a daily deficit of about 271 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **271 cal/day** adds up to **1,897 cal/week** (~0.54 lbs of theoretical tissue change per week).",
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,443 calories**",
+      "Roughly per meal across 3: **59g protein · 27g fat · 84g carbs · 814 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 176g**",
+      "~22 oz cooked chicken breast",
+      "~29-30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 81.4g**",
+      "~6 tbsp olive oil",
+      "~5-6 oz mixed nuts",
+      "~3-4 medium avocados",
+      "~10 tbsp nut butter",
+      "**Carbs · 251.6g**",
+      "~5-6 cups cooked rice",
+      "~9-10 medium bananas",
+      "~16-17 slices whole-grain bread",
+      "~9-10 cups cooked oats",
+      "**Breakfast** · 733 cal — 53g P · 24g F · 75g C Eggs + oats + fruit",
+      "**Lunch** · 855 cal — 62g P · 28g F · 88g C Lean protein + rice + vegetables",
+      "**Dinner** · 855 cal — 62g P · 28g F · 88g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a **Low** fat loss approach, calories are set at **90% of your TDEE** — a daily deficit of about 271 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A conservative deficit. Slower on paper, but far easier to sustain — which is usually what determines the outcome.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "fatloss_moderate": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,307 cal",
+        "-407 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "176g",
+        "",
+        "0.98g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "76.9g",
+        "",
+        "692 calories"
+      ],
+      [
+        "Carbs",
+        "227.7g",
+        "",
+        "911 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "32 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "160 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "20 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "6 mo, 4 d",
+        "",
+        "About 26.7 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "30"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "40"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,307\nMacros: Protein 176g | Fat 76.9g | Carbs 227.7g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a Moderate fat loss approach, calories are set at 85% of your TDEE — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **407 cal/day** adds up to **2,849 cal/week** (~0.81 lbs of theoretical tissue change per week).",
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,307 calories**",
+      "Roughly per meal across 3: **59g protein · 26g fat · 76g carbs · 769 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 176g**",
+      "~22 oz cooked chicken breast",
+      "~29-30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 76.9g**",
+      "~5-6 tbsp olive oil",
+      "~5 oz mixed nuts",
+      "~3-4 medium avocados",
+      "~9-10 tbsp nut butter",
+      "**Carbs · 227.7g**",
+      "~5 cups cooked rice",
+      "~8-9 medium bananas",
+      "~15 slices whole-grain bread",
+      "~8-9 cups cooked oats",
+      "**Breakfast** · 692 cal — 53g P · 23g F · 68g C Eggs + oats + fruit",
+      "**Lunch** · 807 cal — 62g P · 27g F · 80g C Lean protein + rice + vegetables",
+      "**Dinner** · 807 cal — 62g P · 27g F · 80g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a **Moderate** fat loss approach, calories are set at **85% of your TDEE** — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A balanced deficit. Meaningful weekly progress that most clients can hold for a full phase.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "fatloss_aggressive": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,171 cal",
+        "-543 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "176g",
+        "",
+        "0.98g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "72.4g",
+        "",
+        "652 calories"
+      ],
+      [
+        "Carbs",
+        "203.8g",
+        "",
+        "815 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "30 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "160 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "20 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "6 mo, 4 d",
+        "",
+        "About 26.7 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "32"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "38"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,171\nMacros: Protein 176g | Fat 72.4g | Carbs 203.8g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a Aggressive fat loss approach, calories are set at 80% of your TDEE — a daily deficit of about 543 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **543 cal/day** adds up to **3,801 cal/week** (~1.09 lbs of theoretical tissue change per week).",
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,171 calories**",
+      "Roughly per meal across 3: **59g protein · 24g fat · 68g carbs · 724 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 176g**",
+      "~22 oz cooked chicken breast",
+      "~29-30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 72.4g**",
+      "~5 tbsp olive oil",
+      "~5 oz mixed nuts",
+      "~3-4 medium avocados",
+      "~9 tbsp nut butter",
+      "**Carbs · 203.8g**",
+      "~4-5 cups cooked rice",
+      "~7-8 medium bananas",
+      "~13-14 slices whole-grain bread",
+      "~7-8 cups cooked oats",
+      "**Breakfast** · 651 cal — 53g P · 22g F · 61g C Eggs + oats + fruit",
+      "**Lunch** · 760 cal — 62g P · 25g F · 71g C Lean protein + rice + vegetables",
+      "**Dinner** · 760 cal — 62g P · 25g F · 71g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a **Aggressive** fat loss approach, calories are set at **80% of your TDEE** — a daily deficit of about 543 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A larger deficit. Best for clients with more to lose, good adherence history, and a defined end date. Watch recovery and training quality.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "muscle_gain": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,985 cal",
+        "+271 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "162g",
+        "",
+        "0.9g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "99.5g",
+        "",
+        "896 calories"
+      ],
+      [
+        "Carbs",
+        "360.4g",
+        "",
+        "1,442 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "42 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "195 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "15 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "8 mo, 19 d",
+        "",
+        "About 37.5 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "22"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "48"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,985\nMacros: Protein 162g | Fat 99.5g | Carbs 360.4g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal, then applied a controlled surplus of about 271 calories per day. This supports muscle growth while limiting unnecessary fat gain. Protein is set from your current bodyweight to supply the raw material for new tissue.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That surplus of **271 cal/day** adds up to **1,897 cal/week** (~0.54 lbs of theoretical tissue change per week).",
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,985 calories**",
+      "Roughly per meal across 3: **54g protein · 33g fat · 120g carbs · 995 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 162g**",
+      "~20-21 oz cooked chicken breast",
+      "~27 large eggs",
+      "~7-8 cups Greek yogurt",
+      "~6-7 scoops whey protein",
+      "**Fat · 99.5g**",
+      "~7 tbsp olive oil",
+      "~6-7 oz mixed nuts",
+      "~4-5 medium avocados",
+      "~12-13 tbsp nut butter",
+      "**Carbs · 360.4g**",
+      "~8 cups cooked rice",
+      "~13-14 medium bananas",
+      "~24 slices whole-grain bread",
+      "~13-14 cups cooked oats",
+      "**Breakfast** · 896 cal — 49g P · 30g F · 108g C Eggs + oats + fruit",
+      "**Lunch** · 1,045 cal — 57g P · 35g F · 126g C Lean protein + rice + vegetables",
+      "**Dinner** · 1,045 cal — 57g P · 35g F · 126g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal, then applied a controlled surplus of about 271 calories per day. This supports muscle growth while limiting unnecessary fat gain. Protein is set from your current bodyweight to supply the raw material for new tissue.",
+      "**Macro strategy**",
+      "Protein is set first, from **current bodyweight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A controlled surplus supports growth while limiting fat gain. Pair with progressive overload — a surplus without a training stimulus is just a surplus.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "recomp": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,578 cal",
+        "-136 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "180g",
+        "",
+        "1.0g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "85.9g",
+        "",
+        "773 calories"
+      ],
+      [
+        "Carbs",
+        "271.2g",
+        "",
+        "1,085 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "36 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "28"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "42"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,578\nMacros: Protein 180g | Fat 85.9g | Carbs 271.2g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal, then applied a small deficit of about 136 calories. Paired with consistent resistance training and high protein, this supports losing fat and building muscle at the same time.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **136 cal/day** adds up to **952 cal/week** (~0.27 lbs of theoretical tissue change per week).",
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,578 calories**",
+      "Roughly per meal across 3: **60g protein · 29g fat · 90g carbs · 859 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 180g**",
+      "~22-23 oz cooked chicken breast",
+      "~30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 85.9g**",
+      "~6 tbsp olive oil",
+      "~5-6 oz mixed nuts",
+      "~4 medium avocados",
+      "~10-11 tbsp nut butter",
+      "**Carbs · 271.2g**",
+      "~6 cups cooked rice",
+      "~10 medium bananas",
+      "~18 slices whole-grain bread",
+      "~10 cups cooked oats",
+      "**Breakfast** · 773 cal — 54g P · 26g F · 81g C Eggs + oats + fruit",
+      "**Lunch** · 902 cal — 63g P · 30g F · 95g C Lean protein + rice + vegetables",
+      "**Dinner** · 902 cal — 63g P · 30g F · 95g C Protein + potato/grain + salad",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal, then applied a small deficit of about 136 calories. Paired with consistent resistance training and high protein, this supports losing fat and building muscle at the same time.",
+      "**Macro strategy**",
+      "Protein is set first, from **current bodyweight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A small deficit with high protein and consistent resistance training. Scale weight may barely move while body composition shifts — track photos and measurements too.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "maintenance": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,714 cal",
+        "At maintenance",
+        ""
+      ],
+      [
+        "Protein",
+        "180g",
+        "",
+        "1.0g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "90.5g",
+        "",
+        "814 calories"
+      ],
+      [
+        "Carbs",
+        "294.9g",
+        "",
+        "1,180 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "38 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "26"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "44"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,714\nMacros: Protein 180g | Fat 90.5g | Carbs 294.9g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. Your calories are set at maintenance to support training performance and long-term consistency without driving weight change.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,714 calories**",
+      "Roughly per meal across 3: **60g protein · 30g fat · 98g carbs · 905 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 180g**",
+      "~22-23 oz cooked chicken breast",
+      "~30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 90.5g**",
+      "~6-7 tbsp olive oil",
+      "~6 oz mixed nuts",
+      "~4 medium avocados",
+      "~11-12 tbsp nut butter",
+      "**Carbs · 294.9g**",
+      "~6-7 cups cooked rice",
+      "~11 medium bananas",
+      "~19-20 slices whole-grain bread",
+      "~11 cups cooked oats",
+      "**Breakfast** · 814 cal — 54g P · 27g F · 88g C Eggs + oats + fruit",
+      "**Lunch** · 950 cal — 63g P · 32g F · 103g C Lean protein + rice + vegetables",
+      "**Dinner** · 950 cal — 63g P · 32g F · 103g C Protein + potato/grain + salad",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. Your calories are set at maintenance to support training performance and long-term consistency without driving weight change.",
+      "**Macro strategy**",
+      "Protein is set first, from **current bodyweight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "Calories support performance, recovery, and consistency without pushing weight in either direction.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "reverse_diet": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,850 cal",
+        "+136 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "162g",
+        "",
+        "0.9g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "95g",
+        "",
+        "855 calories"
+      ],
+      [
+        "Carbs",
+        "336.8g",
+        "",
+        "1,347 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "40 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "23"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "47"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,850\nMacros: Protein 162g | Fat 95g | Carbs 336.8g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. Calories are then raised gradually — about 136 above your estimate — to help restore energy and metabolic rate after a period of dieting, without a sharp rebound.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That surplus of **136 cal/day** adds up to **952 cal/week** (~0.27 lbs of theoretical tissue change per week).",
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,850 calories**",
+      "Roughly per meal across 3: **54g protein · 32g fat · 112g carbs · 950 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 162g**",
+      "~20-21 oz cooked chicken breast",
+      "~27 large eggs",
+      "~7-8 cups Greek yogurt",
+      "~6-7 scoops whey protein",
+      "**Fat · 95g**",
+      "~6-7 tbsp olive oil",
+      "~6-7 oz mixed nuts",
+      "~4-5 medium avocados",
+      "~12 tbsp nut butter",
+      "**Carbs · 336.8g**",
+      "~7-8 cups cooked rice",
+      "~12-13 medium bananas",
+      "~22-23 slices whole-grain bread",
+      "~12-13 cups cooked oats",
+      "**Breakfast** · 855 cal — 49g P · 28g F · 101g C Eggs + oats + fruit",
+      "**Lunch** · 997 cal — 57g P · 33g F · 118g C Lean protein + rice + vegetables",
+      "**Dinner** · 997 cal — 57g P · 33g F · 118g C Protein + potato/grain + salad",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. Calories are then raised gradually — about 136 above your estimate — to help restore energy and metabolic rate after a period of dieting, without a sharp rebound.",
+      "**Macro strategy**",
+      "Protein is set first, from **current bodyweight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "Calories increase gradually to restore energy, hormone function, and metabolic rate after dieting. Expect some weight change; that is the point.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "slider_0": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,307 cal",
+        "-407 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "176g",
+        "",
+        "0.98g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "102.5g",
+        "",
+        "922 calories"
+      ],
+      [
+        "Carbs",
+        "170.1g",
+        "",
+        "680 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "32 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "160 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "20 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "6 mo, 4 d",
+        "",
+        "About 26.7 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "30"
+      ],
+      [
+        "Fat",
+        "40"
+      ],
+      [
+        "Carbs",
+        "30"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,307\nMacros: Protein 176g | Fat 102.5g | Carbs 170.1g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a Moderate fat loss approach, calories are set at 85% of your TDEE — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **407 cal/day** adds up to **2,849 cal/week** (~0.81 lbs of theoretical tissue change per week).",
+      "Fat is set at **40% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,307 calories**",
+      "Roughly per meal across 3: **59g protein · 34g fat · 57g carbs · 769 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 176g**",
+      "~22 oz cooked chicken breast",
+      "~29-30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 102.5g**",
+      "~7-8 tbsp olive oil",
+      "~7 oz mixed nuts",
+      "~4-5 medium avocados",
+      "~13 tbsp nut butter",
+      "**Carbs · 170.1g**",
+      "~3-4 cups cooked rice",
+      "~6-7 medium bananas",
+      "~11-12 slices whole-grain bread",
+      "~6-7 cups cooked oats",
+      "**Breakfast** · 692 cal — 53g P · 31g F · 51g C Eggs + oats + fruit",
+      "**Lunch** · 807 cal — 62g P · 36g F · 60g C Lean protein + rice + vegetables",
+      "**Dinner** · 807 cal — 62g P · 36g F · 60g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a **Moderate** fat loss approach, calories are set at **85% of your TDEE** — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A balanced deficit. Meaningful weekly progress that most clients can hold for a full phase.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "slider_25": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,307 cal",
+        "-407 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "176g",
+        "",
+        "0.98g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "89.7g",
+        "",
+        "807 calories"
+      ],
+      [
+        "Carbs",
+        "198.9g",
+        "",
+        "796 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "32 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "160 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "20 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "6 mo, 4 d",
+        "",
+        "About 26.7 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "30"
+      ],
+      [
+        "Fat",
+        "35"
+      ],
+      [
+        "Carbs",
+        "34"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,307\nMacros: Protein 176g | Fat 89.7g | Carbs 198.9g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a Moderate fat loss approach, calories are set at 85% of your TDEE — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **407 cal/day** adds up to **2,849 cal/week** (~0.81 lbs of theoretical tissue change per week).",
+      "Fat is set at **35% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,307 calories**",
+      "Roughly per meal across 3: **59g protein · 30g fat · 66g carbs · 769 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 176g**",
+      "~22 oz cooked chicken breast",
+      "~29-30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 89.7g**",
+      "~6-7 tbsp olive oil",
+      "~6 oz mixed nuts",
+      "~4 medium avocados",
+      "~11-12 tbsp nut butter",
+      "**Carbs · 198.9g**",
+      "~4-5 cups cooked rice",
+      "~7-8 medium bananas",
+      "~13-14 slices whole-grain bread",
+      "~7-8 cups cooked oats",
+      "**Breakfast** · 692 cal — 53g P · 27g F · 60g C Eggs + oats + fruit",
+      "**Lunch** · 807 cal — 62g P · 31g F · 70g C Lean protein + rice + vegetables",
+      "**Dinner** · 807 cal — 62g P · 31g F · 70g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a **Moderate** fat loss approach, calories are set at **85% of your TDEE** — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A balanced deficit. Meaningful weekly progress that most clients can hold for a full phase.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "slider_75": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,307 cal",
+        "-407 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "176g",
+        "",
+        "0.98g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "64.1g",
+        "",
+        "577 calories"
+      ],
+      [
+        "Carbs",
+        "256.5g",
+        "",
+        "1,026 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "32 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "160 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "20 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "6 mo, 4 d",
+        "",
+        "About 26.7 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "30"
+      ],
+      [
+        "Fat",
+        "25"
+      ],
+      [
+        "Carbs",
+        "44"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,307\nMacros: Protein 176g | Fat 64.1g | Carbs 256.5g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a Moderate fat loss approach, calories are set at 85% of your TDEE — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **407 cal/day** adds up to **2,849 cal/week** (~0.81 lbs of theoretical tissue change per week).",
+      "Fat is set at **25% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,307 calories**",
+      "Roughly per meal across 3: **59g protein · 21g fat · 86g carbs · 769 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 176g**",
+      "~22 oz cooked chicken breast",
+      "~29-30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 64.1g**",
+      "~4-5 tbsp olive oil",
+      "~4-5 oz mixed nuts",
+      "~3 medium avocados",
+      "~8 tbsp nut butter",
+      "**Carbs · 256.5g**",
+      "~5-6 cups cooked rice",
+      "~9-10 medium bananas",
+      "~17 slices whole-grain bread",
+      "~9-10 cups cooked oats",
+      "**Breakfast** · 692 cal — 53g P · 19g F · 77g C Eggs + oats + fruit",
+      "**Lunch** · 807 cal — 62g P · 22g F · 90g C Lean protein + rice + vegetables",
+      "**Dinner** · 807 cal — 62g P · 22g F · 90g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a **Moderate** fat loss approach, calories are set at **85% of your TDEE** — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A balanced deficit. Meaningful weekly progress that most clients can hold for a full phase.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "slider_100": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,307 cal",
+        "-407 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "176g",
+        "",
+        "0.98g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "51.3g",
+        "",
+        "462 calories"
+      ],
+      [
+        "Carbs",
+        "285.3g",
+        "",
+        "1,141 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "32 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "160 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "20 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "6 mo, 4 d",
+        "",
+        "About 26.7 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "30"
+      ],
+      [
+        "Fat",
+        "20"
+      ],
+      [
+        "Carbs",
+        "50"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,307\nMacros: Protein 176g | Fat 51.3g | Carbs 285.3g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a Moderate fat loss approach, calories are set at 85% of your TDEE — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **407 cal/day** adds up to **2,849 cal/week** (~0.81 lbs of theoretical tissue change per week).",
+      "Fat is set at **20% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,307 calories**",
+      "Roughly per meal across 3: **59g protein · 17g fat · 95g carbs · 769 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 176g**",
+      "~22 oz cooked chicken breast",
+      "~29-30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 51.3g**",
+      "~3-4 tbsp olive oil",
+      "~3-4 oz mixed nuts",
+      "~2-3 medium avocados",
+      "~6-7 tbsp nut butter",
+      "**Carbs · 285.3g**",
+      "~6-7 cups cooked rice",
+      "~10-11 medium bananas",
+      "~19 slices whole-grain bread",
+      "~10-11 cups cooked oats",
+      "**Breakfast** · 692 cal — 53g P · 15g F · 86g C Eggs + oats + fruit",
+      "**Lunch** · 807 cal — 62g P · 18g F · 100g C Lean protein + rice + vegetables",
+      "**Dinner** · 807 cal — 62g P · 18g F · 100g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a **Moderate** fat loss approach, calories are set at **85% of your TDEE** — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A balanced deficit. Meaningful weekly progress that most clients can hold for a full phase.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "gain_slider_100": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,985 cal",
+        "+271 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "162g",
+        "",
+        "0.9g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "66.3g",
+        "",
+        "597 calories"
+      ],
+      [
+        "Carbs",
+        "435.1g",
+        "",
+        "1,740 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "42 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "195 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "15 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "8 mo, 19 d",
+        "",
+        "About 37.5 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "22"
+      ],
+      [
+        "Fat",
+        "20"
+      ],
+      [
+        "Carbs",
+        "58"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,985\nMacros: Protein 162g | Fat 66.3g | Carbs 435.1g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal, then applied a controlled surplus of about 271 calories per day. This supports muscle growth while limiting unnecessary fat gain. Protein is set from your current bodyweight to supply the raw material for new tissue.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That surplus of **271 cal/day** adds up to **1,897 cal/week** (~0.54 lbs of theoretical tissue change per week).",
+      "Fat is set at **20% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,985 calories**",
+      "Roughly per meal across 3: **54g protein · 22g fat · 145g carbs · 995 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 162g**",
+      "~20-21 oz cooked chicken breast",
+      "~27 large eggs",
+      "~7-8 cups Greek yogurt",
+      "~6-7 scoops whey protein",
+      "**Fat · 66.3g**",
+      "~4-5 tbsp olive oil",
+      "~4-5 oz mixed nuts",
+      "~3 medium avocados",
+      "~8-9 tbsp nut butter",
+      "**Carbs · 435.1g**",
+      "~9-10 cups cooked rice",
+      "~16 medium bananas",
+      "~29 slices whole-grain bread",
+      "~16 cups cooked oats",
+      "**Breakfast** · 896 cal — 49g P · 20g F · 131g C Eggs + oats + fruit",
+      "**Lunch** · 1,045 cal — 57g P · 23g F · 152g C Lean protein + rice + vegetables",
+      "**Dinner** · 1,045 cal — 57g P · 23g F · 152g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal, then applied a controlled surplus of about 271 calories per day. This supports muscle growth while limiting unnecessary fat gain. Protein is set from your current bodyweight to supply the raw material for new tissue.",
+      "**Macro strategy**",
+      "Protein is set first, from **current bodyweight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A controlled surplus supports growth while limiting fat gain. Pair with progressive overload — a surplus without a training stimulus is just a surplus.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "meals_4": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,307 cal",
+        "-407 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "176g",
+        "",
+        "0.98g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "76.9g",
+        "",
+        "692 calories"
+      ],
+      [
+        "Carbs",
+        "227.7g",
+        "",
+        "911 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "32 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "160 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "20 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "6 mo, 4 d",
+        "",
+        "About 26.7 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "30"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "40"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,307\nMacros: Protein 176g | Fat 76.9g | Carbs 227.7g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a Moderate fat loss approach, calories are set at 85% of your TDEE — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **407 cal/day** adds up to **2,849 cal/week** (~0.81 lbs of theoretical tissue change per week).",
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,307 calories**",
+      "Roughly per meal across 4: **44g protein · 19g fat · 57g carbs · 577 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 176g**",
+      "~22 oz cooked chicken breast",
+      "~29-30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 76.9g**",
+      "~5-6 tbsp olive oil",
+      "~5 oz mixed nuts",
+      "~3-4 medium avocados",
+      "~9-10 tbsp nut butter",
+      "**Carbs · 227.7g**",
+      "~5 cups cooked rice",
+      "~8-9 medium bananas",
+      "~15 slices whole-grain bread",
+      "~8-9 cups cooked oats",
+      "**Breakfast** · 646 cal — 49g P · 22g F · 64g C Eggs + oats + fruit",
+      "**Lunch** · 738 cal — 56g P · 25g F · 73g C Lean protein + rice + vegetables",
+      "**Snack** · 277 cal — 21g P · 9g F · 27g C Greek yogurt + nuts",
+      "**Dinner** · 646 cal — 49g P · 22g F · 64g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a **Moderate** fat loss approach, calories are set at **85% of your TDEE** — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A balanced deficit. Meaningful weekly progress that most clients can hold for a full phase.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "meals_5_no_review": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,307 cal",
+        "-407 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "176g",
+        "",
+        "0.98g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "76.9g",
+        "",
+        "692 calories"
+      ],
+      [
+        "Carbs",
+        "227.7g",
+        "",
+        "911 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "32 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "160 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "20 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "6 mo, 4 d",
+        "",
+        "About 26.7 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "30"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "40"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,307\nMacros: Protein 176g | Fat 76.9g | Carbs 227.7g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a Moderate fat loss approach, calories are set at 85% of your TDEE — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **407 cal/day** adds up to **2,849 cal/week** (~0.81 lbs of theoretical tissue change per week).",
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,307 calories**",
+      "Roughly per meal across 5: **35g protein · 15g fat · 46g carbs · 461 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 176g**",
+      "~22 oz cooked chicken breast",
+      "~29-30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 76.9g**",
+      "~5-6 tbsp olive oil",
+      "~5 oz mixed nuts",
+      "~3-4 medium avocados",
+      "~9-10 tbsp nut butter",
+      "**Carbs · 227.7g**",
+      "~5 cups cooked rice",
+      "~8-9 medium bananas",
+      "~15 slices whole-grain bread",
+      "~8-9 cups cooked oats",
+      "**Breakfast** · 577 cal — 44g P · 19g F · 57g C Eggs + oats + fruit",
+      "**Snack** · 231 cal — 18g P · 8g F · 23g C Protein shake + banana",
+      "**Lunch** · 646 cal — 49g P · 22g F · 64g C Lean protein + rice + vegetables",
+      "**Snack** · 231 cal — 18g P · 8g F · 23g C Greek yogurt + berries",
+      "**Dinner** · 623 cal — 48g P · 21g F · 61g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a **Moderate** fat loss approach, calories are set at **85% of your TDEE** — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A balanced deficit. Meaningful weekly progress that most clients can hold for a full phase.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "review_8": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,307 cal",
+        "-407 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "176g",
+        "",
+        "0.98g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "76.9g",
+        "",
+        "692 calories"
+      ],
+      [
+        "Carbs",
+        "227.7g",
+        "",
+        "911 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "32 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "160 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "20 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "6 mo, 4 d",
+        "",
+        "About 26.7 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "30"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "40"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,307\nMacros: Protein 176g | Fat 76.9g | Carbs 227.7g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a Moderate fat loss approach, calories are set at 85% of your TDEE — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **407 cal/day** adds up to **2,849 cal/week** (~0.81 lbs of theoretical tissue change per week).",
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,307 calories**",
+      "Roughly per meal across 3: **59g protein · 26g fat · 76g carbs · 769 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 176g**",
+      "~22 oz cooked chicken breast",
+      "~29-30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 76.9g**",
+      "~5-6 tbsp olive oil",
+      "~5 oz mixed nuts",
+      "~3-4 medium avocados",
+      "~9-10 tbsp nut butter",
+      "**Carbs · 227.7g**",
+      "~5 cups cooked rice",
+      "~8-9 medium bananas",
+      "~15 slices whole-grain bread",
+      "~8-9 cups cooked oats",
+      "**Breakfast** · 692 cal — 53g P · 23g F · 68g C Eggs + oats + fruit",
+      "**Lunch** · 807 cal — 62g P · 27g F · 80g C Lean protein + rice + vegetables",
+      "**Dinner** · 807 cal — 62g P · 27g F · 80g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a **Moderate** fat loss approach, calories are set at **85% of your TDEE** — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A balanced deficit. Meaningful weekly progress that most clients can hold for a full phase.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "female_fatloss_low": {
+    "metrics": [
+      [
+        "BMR",
+        "1,222 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "1,466 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "1,319 cal",
+        "-147 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "143g",
+        "",
+        "0.99g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "29.3g",
+        "",
+        "264 calories"
+      ],
+      [
+        "Carbs",
+        "120.8g",
+        "",
+        "483 calories"
+      ],
+      [
+        "💧 Water",
+        "72 oz",
+        "",
+        "About 9 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "18 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "130 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "15 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "4 mo, 18 d",
+        "",
+        "About 20 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "43"
+      ],
+      [
+        "Fat",
+        "20"
+      ],
+      [
+        "Carbs",
+        "37"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 1,319\nMacros: Protein 143g | Fat 29.3g | Carbs 120.8g\n\nWhy these numbers:\nWe calculated your BMR (1222 cal) and estimated your daily expenditure at 1466 cal. For a Low fat loss approach, calories are set at 90% of your TDEE — a daily deficit of about 147 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **147 cal/day** adds up to **1,029 cal/week** (~0.29 lbs of theoretical tissue change per week).",
+      "Fat is set at **20% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **1,319 calories**",
+      "Roughly per meal across 3: **48g protein · 10g fat · 40g carbs · 440 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 143g**",
+      "~18 oz cooked chicken breast",
+      "~24 large eggs",
+      "~6-7 cups Greek yogurt",
+      "~6 scoops whey protein",
+      "**Fat · 29.3g**",
+      "~2 tbsp olive oil",
+      "~2 oz mixed nuts",
+      "~1-2 medium avocados",
+      "~3-4 tbsp nut butter",
+      "**Carbs · 120.8g**",
+      "~2-3 cups cooked rice",
+      "~4-5 medium bananas",
+      "~8 slices whole-grain bread",
+      "~4-5 cups cooked oats",
+      "**Breakfast** · 396 cal — 43g P · 9g F · 36g C Eggs + oats + fruit",
+      "**Lunch** · 462 cal — 50g P · 10g F · 42g C Lean protein + rice + vegetables",
+      "**Dinner** · 462 cal — 50g P · 10g F · 42g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1222 cal) and estimated your daily expenditure at 1466 cal. For a **Low** fat loss approach, calories are set at **90% of your TDEE** — a daily deficit of about 147 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A conservative deficit. Slower on paper, but far easier to sustain — which is usually what determines the outcome.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "female_gain_very_active": {
+    "metrics": [
+      [
+        "BMR",
+        "1,356 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,340 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,574 cal",
+        "+234 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "117g",
+        "",
+        "0.9g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "85.8g",
+        "",
+        "772 calories"
+      ],
+      [
+        "Carbs",
+        "333.5g",
+        "",
+        "1,334 calories"
+      ],
+      [
+        "💧 Water",
+        "81 oz",
+        "",
+        "About 10 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "36 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "140 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "10 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "5 mo, 22 d",
+        "",
+        "About 25 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "18"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "52"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,574\nMacros: Protein 117g | Fat 85.8g | Carbs 333.5g\n\nWhy these numbers:\nWe calculated your BMR (1356 cal) and estimated your daily expenditure at 2340 cal, then applied a controlled surplus of about 234 calories per day. This supports muscle growth while limiting unnecessary fat gain. Protein is set from your current bodyweight to supply the raw material for new tissue.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That surplus of **234 cal/day** adds up to **1,638 cal/week** (~0.47 lbs of theoretical tissue change per week).",
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,574 calories**",
+      "Roughly per meal across 3: **39g protein · 29g fat · 111g carbs · 858 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 117g**",
+      "~14-15 oz cooked chicken breast",
+      "~19-20 large eggs",
+      "~5-6 cups Greek yogurt",
+      "~5 scoops whey protein",
+      "**Fat · 85.8g**",
+      "~6 tbsp olive oil",
+      "~5-6 oz mixed nuts",
+      "~4 medium avocados",
+      "~10-11 tbsp nut butter",
+      "**Carbs · 333.5g**",
+      "~7-8 cups cooked rice",
+      "~12-13 medium bananas",
+      "~22-23 slices whole-grain bread",
+      "~12-13 cups cooked oats",
+      "**Breakfast** · 772 cal — 35g P · 26g F · 100g C Eggs + oats + fruit",
+      "**Lunch** · 901 cal — 41g P · 30g F · 117g C Lean protein + rice + vegetables",
+      "**Dinner** · 901 cal — 41g P · 30g F · 117g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1356 cal) and estimated your daily expenditure at 2340 cal, then applied a controlled surplus of about 234 calories per day. This supports muscle growth while limiting unnecessary fat gain. Protein is set from your current bodyweight to supply the raw material for new tissue.",
+      "**Macro strategy**",
+      "Protein is set first, from **current bodyweight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A controlled surplus supports growth while limiting fat gain. Pair with progressive overload — a surplus without a training stimulus is just a surplus.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "low_carb_warnings": {
+    "metrics": [
+      [
+        "BMR",
+        "925 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "1,110 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "888 cal",
+        "-222 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "110g",
+        "",
+        "1.0g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "39.5g",
+        "",
+        "356 calories"
+      ],
+      [
+        "Carbs",
+        "23.1g",
+        "",
+        "92 calories"
+      ],
+      [
+        "💧 Water",
+        "55 oz",
+        "",
+        "About 7 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "12 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "100 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "10 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "3 mo, 2 d",
+        "",
+        "About 13.3 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [
+      "**Carbohydrates are very low (23.1g).** Below 50g, most clients report reduced training performance. Consider sliding toward **Carbs**.",
+      "**Target calories (888) fall below estimated BMR (925).** Review before issuing this plan."
+    ],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "50"
+      ],
+      [
+        "Fat",
+        "40"
+      ],
+      [
+        "Carbs",
+        "10"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 888\nMacros: Protein 110g | Fat 39.5g | Carbs 23.1g\n\nWhy these numbers:\nWe calculated your BMR (925 cal) and estimated your daily expenditure at 1110 cal. For a Aggressive fat loss approach, calories are set at 80% of your TDEE — a daily deficit of about 222 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **222 cal/day** adds up to **1,554 cal/week** (~0.44 lbs of theoretical tissue change per week).",
+      "Fat is set at **40% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **888 calories**",
+      "Roughly per meal across 3: **37g protein · 13g fat · 8g carbs · 296 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 110g**",
+      "~13-14 oz cooked chicken breast",
+      "~18-19 large eggs",
+      "~5 cups Greek yogurt",
+      "~4-5 scoops whey protein",
+      "**Fat · 39.5g**",
+      "~3 tbsp olive oil",
+      "~2-3 oz mixed nuts",
+      "~1-2 medium avocados",
+      "~5 tbsp nut butter",
+      "**Carbs · 23.1g**",
+      "about 1 cup cooked rice",
+      "about 1 medium banana",
+      "~1-2 slices whole-grain bread",
+      "about 1 cup cooked oats",
+      "**Breakfast** · 266 cal — 33g P · 12g F · 7g C Eggs + oats + fruit",
+      "**Lunch** · 311 cal — 38g P · 14g F · 8g C Lean protein + rice + vegetables",
+      "**Dinner** · 311 cal — 38g P · 14g F · 8g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (925 cal) and estimated your daily expenditure at 1110 cal. For a **Aggressive** fat loss approach, calories are set at **80% of your TDEE** — a daily deficit of about 222 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A larger deficit. Best for clients with more to lose, good adherence history, and a defined end date. Watch recovery and training quality.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "negative_carbs": {
+    "metrics": [
+      [
+        "BMR",
+        "1,505 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "1,806 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "1,716 cal",
+        "-90 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "260g",
+        "",
+        "1.0g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "76.3g",
+        "",
+        "687 calories"
+      ],
+      [
+        "Carbs",
+        "-2.7g",
+        "",
+        "-11 calories"
+      ],
+      [
+        "💧 Water",
+        "130 oz",
+        "",
+        "About 16 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "24 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ]
+    ],
+    "warnings": [
+      "**Carbohydrates calculated below zero (-2.7g).** Protein and fat targets exceed total calories. Slide toward **Carbs** to reduce fat, or revisit the calorie target."
+    ],
+    "errors": [],
+    "macro_bar": [],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 1,716\nMacros: Protein 260g | Fat 76.3g | Carbs -2.7g\n\nWhy these numbers:\nWe calculated your BMR (1505 cal) and estimated your daily expenditure at 1806 cal, then applied a small deficit of about 90 calories. Paired with consistent resistance training and high protein, this supports losing fat and building muscle at the same time.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **90 cal/day** adds up to **630 cal/week** (~0.18 lbs of theoretical tissue change per week).",
+      "Fat is set at **40% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **1,716 calories**",
+      "Per-meal and food breakdowns are hidden until the macro split is valid — adjust the slider or calorie target above.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1505 cal) and estimated your daily expenditure at 1806 cal, then applied a small deficit of about 90 calories. Paired with consistent resistance training and high protein, this supports losing fat and building muscle at the same time.",
+      "**Macro strategy**",
+      "Protein is set first, from **current bodyweight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A small deficit with high protein and consistent resistance training. Scale weight may barely move while body composition shifts — track photos and measurements too.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "long_timeframe": {
+    "metrics": [
+      [
+        "BMR",
+        "2,386 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "3,698 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "3,143 cal",
+        "-555 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "220g",
+        "",
+        "0.69g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "104.8g",
+        "",
+        "943 calories"
+      ],
+      [
+        "Carbs",
+        "330g",
+        "",
+        "1,320 calories"
+      ],
+      [
+        "💧 Water",
+        "160 oz",
+        "",
+        "About 20 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "44 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "200 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "120 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "36 mo, 25 d",
+        "",
+        "About 160 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [
+      "**Estimated timeframe is 160.0 weeks.** Long horizons usually benefit from staged targets rather than one continuous phase."
+    ],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "28"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "42"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi there,\n\nHere are your nutrition targets:\n\nDaily Calories: 3,143\nMacros: Protein 220g | Fat 104.8g | Carbs 330g\n\nWhy these numbers:\nWe calculated your BMR (2386 cal) and estimated your daily expenditure at 3698 cal. For a Moderate fat loss approach, calories are set at 85% of your TDEE — a daily deficit of about 555 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\n[Your Name]\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **555 cal/day** adds up to **3,885 cal/week** (~1.11 lbs of theoretical tissue change per week).",
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **3,143 calories**",
+      "Roughly per meal across 3: **73g protein · 35g fat · 110g carbs · 1,048 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Add a client name above to personalize the report and file names.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 220g**",
+      "~27-28 oz cooked chicken breast",
+      "~36-37 large eggs",
+      "~10 cups Greek yogurt",
+      "~9 scoops whey protein",
+      "**Fat · 104.8g**",
+      "~7-8 tbsp olive oil",
+      "~7 oz mixed nuts",
+      "~4-5 medium avocados",
+      "~13 tbsp nut butter",
+      "**Carbs · 330g**",
+      "~7-8 cups cooked rice",
+      "~12-13 medium bananas",
+      "~22 slices whole-grain bread",
+      "~12-13 cups cooked oats",
+      "**Breakfast** · 943 cal — 66g P · 31g F · 99g C Eggs + oats + fruit",
+      "**Lunch** · 1,100 cal — 77g P · 37g F · 115g C Lean protein + rice + vegetables",
+      "**Dinner** · 1,100 cal — 77g P · 37g F · 115g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (2386 cal) and estimated your daily expenditure at 3698 cal. For a **Moderate** fat loss approach, calories are set at **85% of your TDEE** — a daily deficit of about 555 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A balanced deficit. Meaningful weekly progress that most clients can hold for a full phase.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "named_with_notes": {
+    "metrics": [
+      [
+        "BMR",
+        "1,751 cal",
+        "",
+        "Mifflin-St Jeor estimate at rest."
+      ],
+      [
+        "Estimated TDEE",
+        "2,714 cal",
+        "",
+        "BMR × activity multiplier."
+      ],
+      [
+        "Daily Target",
+        "2,307 cal",
+        "-407 cal/day vs TDEE",
+        ""
+      ],
+      [
+        "Protein",
+        "176g",
+        "",
+        "0.98g per lb of current bodyweight"
+      ],
+      [
+        "Fat",
+        "76.9g",
+        "",
+        "692 calories"
+      ],
+      [
+        "Carbs",
+        "227.7g",
+        "",
+        "911 calories"
+      ],
+      [
+        "💧 Water",
+        "90 oz",
+        "",
+        "About 11 cups/day (~0.5 oz per lb, plus a bump for very active clients)."
+      ],
+      [
+        "🌾 Fiber",
+        "32 g",
+        "",
+        "About 14g per 1,000 calories — supports digestion and satiety."
+      ],
+      [
+        "Goal Weight",
+        "160 lbs",
+        "",
+        ""
+      ],
+      [
+        "Change Needed",
+        "20 lbs",
+        "",
+        ""
+      ],
+      [
+        "Estimated Timeframe",
+        "6 mo, 4 d",
+        "",
+        "About 26.7 weeks at the planned rate of change."
+      ]
+    ],
+    "warnings": [],
+    "errors": [],
+    "macro_bar": [
+      [
+        "Protein",
+        "30"
+      ],
+      [
+        "Fat",
+        "30"
+      ],
+      [
+        "Carbs",
+        "40"
+      ]
+    ],
+    "email": [
+      "Subject: Your Personalized Nutrition Plan\n\nHi Jordan,\n\nHere are your nutrition targets:\n\nDaily Calories: 2,307\nMacros: Protein 176g | Fat 76.9g | Carbs 227.7g\n\nWhy these numbers:\nWe calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a Moderate fat loss approach, calories are set at 85% of your TDEE — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.\n\nRemember, these are a starting point. We'll track how you feel and perform\nover the next two to three weeks and adjust from there.\n\nQuestions? Bring them to your next session.\n\nCoach Sam\nBurn Boot Camp"
+    ],
+    "captions": [
+      "That deficit of **407 cal/day** adds up to **2,849 cal/week** (~0.81 lbs of theoretical tissue change per week).",
+      "Fat is set at **30% of total calories** (centered = 30%, range 20–40%). Protein is fixed by goal; carbohydrates take the remainder.",
+      "Total from macros: **2,307 calories**",
+      "Roughly per meal across 5: **35g protein · 15g fat · 46g carbs · 461 cal**",
+      "Each is one way to hit that macro for the whole day with a single food — yardsticks, not meal plans.",
+      "One way the day could come together. Swap foods freely — aim to land near the daily totals, not to copy this exactly.",
+      "At the planned rate, that lands around **<MONTH YEAR>**. Estimates assume steady adherence; real progress is rarely linear.",
+      "Report will show a review date of **<DATE>**.",
+      "Tip: the PDF is the client-ready deliverable. Printing the page is handy for a quick paper copy of what's on screen.",
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "Daily Energy Targets",
+      "Macronutrient Targets",
+      "**Fat / Carb Balance**",
+      "**🥑 Fat**",
+      "**🍚 Carbs**",
+      "**Protein · 176g**",
+      "~22 oz cooked chicken breast",
+      "~29-30 large eggs",
+      "~8 cups Greek yogurt",
+      "~7-8 scoops whey protein",
+      "**Fat · 76.9g**",
+      "~5-6 tbsp olive oil",
+      "~5 oz mixed nuts",
+      "~3-4 medium avocados",
+      "~9-10 tbsp nut butter",
+      "**Carbs · 227.7g**",
+      "~5 cups cooked rice",
+      "~8-9 medium bananas",
+      "~15 slices whole-grain bread",
+      "~8-9 cups cooked oats",
+      "**Breakfast** · 577 cal — 44g P · 19g F · 57g C Eggs + oats + fruit",
+      "**Snack** · 231 cal — 18g P · 8g F · 23g C Protein shake + banana",
+      "**Lunch** · 646 cal — 49g P · 22g F · 64g C Lean protein + rice + vegetables",
+      "**Snack** · 231 cal — 18g P · 8g F · 23g C Greek yogurt + berries",
+      "**Dinner** · 623 cal — 48g P · 21g F · 61g C Protein + potato/grain + salad",
+      "Goal Progress Estimate",
+      "Professional Reasoning",
+      "**Why these calories?**",
+      "We calculated your BMR (1751 cal) and estimated your daily expenditure at 2714 cal. For a **Moderate** fat loss approach, calories are set at **85% of your TDEE** — a daily deficit of about 407 calories. Protein is anchored to your goal weight to help protect lean mass while you are in a deficit.",
+      "**Macro strategy**",
+      "Protein is set first, from **goal weight**, because it is the target with the least room to compromise — it protects lean mass and drives satiety. Fat is then set as a share of total calories to support hormone function, and carbohydrates take whatever remains as training fuel. Use the slider to shift that fat/carb split toward whatever the client actually eats and performs on.",
+      "A balanced deficit. Meaningful weekly progress that most clients can hold for a full phase.",
+      "**Trainer notes**",
+      "> No dairy. Travels Mondays.",
+      "Disclaimer: General educational guidance based on evidence-based nutrition principles. Not medical or dietetic advice. Clients with medical conditions, who are pregnant or nursing, or who take prescription medication should consult their healthcare provider before changing their nutrition.",
+      "Export &amp; Share",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "err_fatloss_goal_higher": {
+    "metrics": [],
+    "warnings": [],
+    "errors": [
+      "Goal weight must be **lower** than current weight for Fat Loss."
+    ],
+    "macro_bar": [],
+    "email": [],
+    "captions": [
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "err_gain_goal_lower": {
+    "metrics": [],
+    "warnings": [],
+    "errors": [
+      "Goal weight must be **higher** than current weight for Muscle Gain."
+    ],
+    "macro_bar": [],
+    "email": [],
+    "captions": [
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "err_gain_too_big": {
+    "metrics": [],
+    "warnings": [],
+    "errors": [
+      "A 50 lb muscle gain target is outside a realistic single phase. Consider a staged goal."
+    ],
+    "macro_bar": [],
+    "email": [],
+    "captions": [
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  },
+  "err_delta_150": {
+    "metrics": [],
+    "warnings": [],
+    "errors": [
+      "Goal weight differs from current weight by 160 lbs. Please confirm both entries."
+    ],
+    "macro_bar": [],
+    "email": [],
+    "captions": [
+      "These appear in the contact block on the report's final page. Set once — they carry across every client.",
+      "Upload a CSV with one row per client to get a ZIP of PDFs. Column order is flexible; headers are matched by name.",
+      "Reports are generated in your browser session. Nothing is stored on a server. Refreshing the page clears all client data."
+    ],
+    "markdown": [
+      "Client Nutrition Report",
+      "Evidence-based calorie and macronutrient planning",
+      "Client Information",
+      "**Height**",
+      "### Trainer & Gym",
+      "### PDF Content",
+      "### Load a Saved Client"
+    ]
+  }
+}
