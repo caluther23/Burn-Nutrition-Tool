@@ -30,7 +30,10 @@ SEDENTARY = "Sedentary (little to no exercise)"
 VERY = "Very Active (hard exercise 6-7 days/week)"
 
 # Captions / markdown that were deliberately removed or reworded, with why.
-INTENTIONAL_CHANGES: dict[str, str] = {}
+INTENTIONAL_CHANGES: dict[str, str] = {
+    "**🥑 Fat**": "Stage 5: slider end labels moved into one HTML row for mobile",
+    "**🍚 Carbs**": "Stage 5: slider end labels moved into one HTML row for mobile",
+}
 
 
 def case(name, slider=50, meals=3, review=3, trainer="", **fields):

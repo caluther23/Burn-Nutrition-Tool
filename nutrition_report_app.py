@@ -21,7 +21,7 @@ import streamlit as st
 
 from nutrition_core import (
     ACTIVITY_MULTIPLIERS, FAT_LOSS_INTENSITIES, GENDERS, GOALS,
-    ClientProfile, build_plan, validate_profile,
+    ClientProfile, build_plan, fat_pct_from_slider, validate_profile,
 )
 from pdf_report import build_why_text, generate_pdf
 from profile_loader import (
@@ -48,7 +48,7 @@ st.set_page_config(
     page_title="Client Nutrition Report | Burn Boot Camp",
     page_icon="💪",
     layout="centered",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",   # open on desktop, tucked away on phones
 )
 
 st.markdown(f"""
@@ -125,23 +125,23 @@ st.markdown(f"""
     h3, .stMarkdown h3 {{ color: {INK}; }}
 
     /* ---------- Buttons ---------- */
-    .stButton>button, .stDownloadButton>button, .stLinkButton>a {{
+    .stButton button, .stDownloadButton button, .stLinkButton>a {{
         border-radius: 8px; font-weight: 600;
     }}
-    .stDownloadButton>button[kind="primary"],
-    .stButton>button[kind="primary"] {{
+    .stDownloadButton button[kind="primary"],
+    .stButton button[kind="primary"] {{
         background-color: {BRAND_BLUE}; color: {WHITE}; border: 1px solid {BRAND_BLUE};
     }}
-    .stDownloadButton>button[kind="primary"]:hover,
-    .stButton>button[kind="primary"]:hover {{
+    .stDownloadButton button[kind="primary"]:hover,
+    .stButton button[kind="primary"]:hover {{
         background-color: {BLUE_DARK}; border-color: {BLUE_DARK}; color: {WHITE};
     }}
-    .stButton>button[kind="secondary"],
-    .stDownloadButton>button[kind="secondary"] {{
+    .stButton button[kind="secondary"],
+    .stDownloadButton button[kind="secondary"] {{
         background-color: {WHITE}; color: {INK}; border: 1.5px solid {BLUE_LINE};
     }}
-    .stButton>button[kind="secondary"]:hover,
-    .stDownloadButton>button[kind="secondary"]:hover {{
+    .stButton button[kind="secondary"]:hover,
+    .stDownloadButton button[kind="secondary"]:hover {{
         border-color: {BRAND_BLUE}; color: {BRAND_BLUE}; background-color: {BLUE_TINT};
     }}
     .stLinkButton>a {{
@@ -159,15 +159,15 @@ st.markdown(f"""
         border-radius: 10px; padding: 0.8rem 0.9rem;
     }}
     div[data-testid="stMetricValue"] {{ font-size: 1.5rem; color: {INK}; }}
-    div[data-testid="stMetricLabel"] p {{
+    [data-testid="stMetricLabel"] p {{
         font-size: 0.76rem; font-weight: 700; text-transform: uppercase;
         letter-spacing: 0.05em; color: {INK_SOFT};
     }}
     /* Emphasis for the Daily Target card (3rd metric in the energy row).
        Brand blue on white is only 2.48:1, so blue is used as a border and
        tint rather than a text background — numbers stay dark and legible. */
-    #energy-row + div[data-testid="stHorizontalBlock"]
-        > div[data-testid="stColumn"]:nth-child(3) div[data-testid="stMetric"] {{
+    .st-key-energy_row div[data-testid="stColumn"]:nth-child(3)
+        div[data-testid="stMetric"] {{
         background: {BLUE_TINT};
         border: 2.5px solid {BRAND_BLUE};
     }}
@@ -210,6 +210,10 @@ st.markdown(f"""
         display: flex; align-items: center; justify-content: center;
         white-space: nowrap; overflow: hidden;
     }}
+    .slider-ends {{
+        display: flex; justify-content: space-between;
+        font-weight: 700; margin-bottom: -0.4rem;
+    }}
     .disclaimer {{
         font-size: 0.83rem; font-style: italic;
         border-left: 3px solid {BLUE_LINE}; padding: 0.5rem 0 0.5rem 0.85rem;
@@ -217,10 +221,48 @@ st.markdown(f"""
     }}
     hr {{ border-color: {BLUE_LINE}; }}
 
+    /* ---------- Phones ---------- */
+    /* These rows stay side by side on phones instead of stacking one per line:
+       header (title + logo), height (ft + in), and the metric rows. */
+    .st-key-app_header div[data-testid="stHorizontalBlock"],
+    .st-key-height_row div[data-testid="stHorizontalBlock"],
+    .st-key-energy_row div[data-testid="stHorizontalBlock"],
+    .st-key-macro_row div[data-testid="stHorizontalBlock"],
+    .st-key-hydration_row div[data-testid="stHorizontalBlock"],
+    .st-key-progress_row div[data-testid="stHorizontalBlock"] {{
+        flex-wrap: nowrap; gap: 0.5rem;
+    }}
+    .st-key-app_header div[data-testid="stColumn"],
+    .st-key-height_row div[data-testid="stColumn"],
+    .st-key-energy_row div[data-testid="stColumn"],
+    .st-key-macro_row div[data-testid="stColumn"],
+    .st-key-hydration_row div[data-testid="stColumn"],
+    .st-key-progress_row div[data-testid="stColumn"] {{
+        min-width: 0;
+    }}
+    @media (max-width: 640px) {{
+        /* 3.75rem clears Streamlit's fixed top bar (sidebar toggle). */
+        .block-container {{ padding: 3.75rem 1rem 2rem 1rem; }}
+        .bbc-title {{ font-size: 1.55rem; }}
+        .bbc-sub {{ font-size: 0.88rem; }}
+        .section-header {{ margin-top: 1.2rem; }}
+        div[data-testid="stMetric"] {{ padding: 0.55rem 0.5rem; }}
+        div[data-testid="stMetricValue"] {{ font-size: 1.1rem; }}
+        [data-testid="stMetricLabel"] p {{ font-size: 0.62rem; letter-spacing: 0.02em; }}
+        [data-testid="stMetricLabel"], [data-testid="stMetricLabel"] *,
+        [data-testid="stMetricDelta"], [data-testid="stMetricDelta"] * {{
+            white-space: normal !important; overflow: visible !important;
+        }}
+        div[data-testid="stMetricDelta"] {{ font-size: 0.7rem; }}
+        .macro-bar {{ font-size: 0.68rem; }}
+        .macro-seg {{ text-overflow: ellipsis; padding: 0 2px; }}
+    }}
+
     /* ---------- Print ---------- */
     @media print {{
         section[data-testid="stSidebar"], [data-testid="stToolbar"], header,
-        .stButton, .stDownloadButton, .stLinkButton, .no-print {{ display: none !important; }}
+        .stButton, .stDownloadButton, .stLinkButton, .stPopover, .st-key-print_button,
+        .no-print {{ display: none !important; }}
         .block-container {{ max-width: 100% !important; padding-top: 0 !important; }}
         div[data-testid="stMetric"] {{ break-inside: avoid; }}
     }}
@@ -307,9 +349,6 @@ def _batch_template() -> str:
 # ============================================================
 
 with st.sidebar:
-    if LOGO_PATH.exists():
-        st.image(str(LOGO_PATH), width="stretch")
-
     st.markdown("### Trainer & Gym")
     st.text_input("Trainer name", key="trainer_name",
                   placeholder="e.g., Colby Reid, CPT")
@@ -405,7 +444,8 @@ with st.sidebar:
 #  HEADER
 # ============================================================
 
-head_l, head_r = st.columns([3, 1], vertical_alignment="center")
+with st.container(key="app_header"):
+    head_l, head_r = st.columns([3, 1], vertical_alignment="center")
 with head_l:
     st.markdown('<div class="bbc-title">Client Nutrition Report</div>', unsafe_allow_html=True)
     st.markdown('<div class="bbc-sub">Evidence-based calorie and macronutrient planning</div>',
@@ -433,7 +473,8 @@ with col1:
     st.number_input("Age", *AGE_RANGE, key="in_age", step=1)
     st.selectbox("Gender", GENDERS, key="in_gender")
     st.markdown("**Height**")
-    h1, h2 = st.columns(2)
+    with st.container(key="height_row"):
+        h1, h2 = st.columns(2)
     with h1:
         st.number_input("Feet", *FEET_RANGE, key="in_feet", step=1)
     with h2:
@@ -505,12 +546,13 @@ store_profile(profile)
 #  RESULTS
 # ============================================================
 
-section("Daily Energy Targets", '<div id="energy-row"></div>')
+section("Daily Energy Targets")
 
 balance = st.session_state["fat_carb_slider"]
 plan = build_plan(profile, balance)
 
-e1, e2, e3 = st.columns(3)
+with st.container(key="energy_row"):
+    e1, e2, e3 = st.columns(3)
 e1.metric("BMR", f"{plan.bmr:,.0f} cal", help="Mifflin-St Jeor estimate at rest.")
 e2.metric("Estimated TDEE", f"{plan.tdee:,} cal", help="BMR × activity multiplier.")
 with e3:
@@ -534,12 +576,14 @@ if plan.daily_calorie_delta:
 section("Macronutrient Targets")
 
 st.markdown("**Fat / Carb Balance**")
-sl1, sl2, sl3 = st.columns([1, 8, 1])
-sl1.markdown("**🥑 Fat**")
-with sl2:
-    st.slider("Fat / Carb Balance", 0, 100, step=5,
-              key="fat_carb_slider", label_visibility="collapsed")
-sl3.markdown("**🍚 Carbs**")
+# End labels live in one HTML row (not side columns) so they stay put on phones.
+st.markdown('<div class="slider-ends"><span>🥑 Fat</span><span>🍚 Carbs</span></div>',
+            unsafe_allow_html=True)
+# Same values the old st.slider produced (0-100, step 5); only the readout
+# changes, showing the resulting fat % instead of a bare 0-100 number.
+st.select_slider("Fat / Carb Balance", options=list(range(0, 101, 5)),
+                 key="fat_carb_slider", label_visibility="collapsed",
+                 format_func=lambda v: f"{fat_pct_from_slider(v) * 100:.0f}% fat")
 
 st.caption(
     f"Fat is set at **{plan.fat_pct * 100:.0f}% of total calories** "
@@ -547,7 +591,8 @@ st.caption(
     f"the remainder."
 )
 
-m1, m2, m3 = st.columns(3)
+with st.container(key="macro_row"):
+    m1, m2, m3 = st.columns(3)
 m1.metric("Protein", f"{plan.protein_g}g",
           help=f"{plan.protein_per_lb(profile.weight_lbs)}g per lb of current bodyweight")
 m2.metric("Fat", f"{plan.fat_g:g}g", help=f"{plan.fat_cal:,.0f} calories")
@@ -569,11 +614,12 @@ if plan.has_valid_macros and sum(pcts.values()) > 0:
 
 st.caption(f"Total from macros: **{plan.macro_calorie_total:,.0f} calories**")
 
-h1, h2 = st.columns(2)
-h1.metric("💧 Water", f"{plan.water_oz} oz",
+with st.container(key="hydration_row"):
+    w1, w2 = st.columns(2)
+w1.metric("💧 Water", f"{plan.water_oz} oz",
           help=f"About {plan.water_cups} cups/day (~0.5 oz per lb, plus a bump for "
                f"very active clients).")
-h2.metric("🌾 Fiber", f"{plan.fiber_g} g",
+w2.metric("🌾 Fiber", f"{plan.fiber_g} g",
           help="About 14g per 1,000 calories — supports digestion and satiety.")
 
 # ---------- Per-meal reference ----------
@@ -629,7 +675,8 @@ for warning in plan.warnings:
 if plan.timeframe:
     months, days, weeks = plan.timeframe
     section("Goal Progress Estimate")
-    t1, t2, t3 = st.columns(3)
+    with st.container(key="progress_row"):
+        t1, t2, t3 = st.columns(3)
     t1.metric("Goal Weight", f"{profile.goal_weight_lbs:g} lbs")
     t2.metric("Change Needed",
               f"{abs(profile.goal_weight_lbs - profile.weight_lbs):g} lbs")
@@ -640,6 +687,9 @@ if plan.timeframe:
         f"At the planned rate, that lands around **{target_date.strftime('%B %Y')}**. "
         f"Estimates assume steady adherence; real progress is rarely linear."
     )
+else:
+    st.caption(f"No goal-weight timeframe for {profile.primary_goal}: progress on this "
+               f"goal isn't planned around a weekly rate of weight change.")
 
 # ---------- Reasoning ----------
 section("Professional Reasoning")
@@ -683,7 +733,7 @@ if note_key in GOAL_NOTES:
 
 if profile.client_notes:
     st.markdown("**Trainer notes**")
-    st.markdown(f"> {profile.client_notes}")
+    st.markdown("\n".join(f"> {line}" for line in profile.client_notes.splitlines()))
 
 st.markdown(
     '<div class="disclaimer"><strong>Disclaimer:</strong> General educational guidance '
@@ -761,6 +811,7 @@ with x2:
         mime="application/json", width="stretch", type="secondary",
         help="Reload later from the sidebar to regenerate or update this plan.",
     )
+    st.link_button("📝 Open Client Notes (Basecamp)", BASECAMP_URL, width="stretch")
 
 macro_line = f"Protein {plan.protein_g}g | Fat {plan.fat_g:g}g | Carbs {plan.carb_g:g}g"
 why_plain = why_html.replace("<b>", "").replace("</b>", "")
@@ -789,26 +840,32 @@ Burn Boot Camp"""
 with st.expander("📋 Email draft — click the copy icon in the top-right of the box"):
     st.code(email_body, language=None)
 
-st.link_button("📝 Open Client Notes (Basecamp)", BASECAMP_URL, width="stretch")
-
 # st.iframe replaces st.components.v1.html, which Streamlit is removing.
-st.iframe(
-    """
+with st.container(key="print_button"):
+    # The iframe is its own page: zero its margins so the button fits the fixed
+    # height (no scrollbar), and give it a sans-serif font like the app's.
+    st.iframe(
+        """
+    <style>html, body { margin: 0; overflow: hidden; }</style>
     <button onclick="window.parent.print()" style="
         width:100%; padding:0.55rem 1rem; border-radius:8px; font-weight:600;
         font-size:0.95rem; cursor:pointer; color:#0A3D55; background:#FFFFFF;
-        border:1.5px solid #BEE9F7; font-family:inherit;"
+        border:1.5px solid #BEE9F7;
+        font-family:'Source Sans Pro','Source Sans 3',system-ui,-apple-system,'Segoe UI',sans-serif;"
         onmouseover="this.style.borderColor='#00B2E2';this.style.color='#00B2E2';this.style.background='#E8F8FD';"
         onmouseout="this.style.borderColor='#BEE9F7';this.style.color='#0A3D55';this.style.background='#FFFFFF';">
         🖨️ Print this page
     </button>
-    """,
-    height=54,
-)
+        """,
+        height=44,
+    )
 st.caption("Tip: the PDF is the client-ready deliverable. Printing the page is handy "
            "for a quick paper copy of what's on screen.")
 
-with st.popover("🗑️ Reset Form", width="stretch"):
+# Destructive action last, set apart from the export buttons.
+st.markdown(f'<hr style="border:none;border-top:1px solid {BLUE_LINE};margin:1.2rem 0 0.6rem;">',
+            unsafe_allow_html=True)
+with st.popover("🗑️ Reset Form"):
     st.markdown("Clear all client fields? Trainer details and PDF settings are kept.")
     st.button("Yes, reset", key="confirm_reset", type="primary", width="stretch",
               on_click=reset_client)
