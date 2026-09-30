@@ -164,7 +164,75 @@ def check_intensity_survives_goal_change() -> str | None:
     return None if got == "Aggressive" else f"intensity reset to {got!r}"
 
 
-BEHAVIOR_CHECKS: list = [check_intensity_survives_goal_change]
+def check_reset_keeps_trainer() -> str | None:
+    at = new_app()
+    at.text_input(key="trainer_name").input("Coach Sam").run()
+    at.text_input(key="trainer_email").input("sam@example.com").run()
+    at.text_input(key="in_client_name").input("Jordan Lee").run()
+    at.number_input(key="in_weight_lbs").set_value(210.0).run()
+    at.radio(key="meals_per_day").set_value(5).run()
+    at.button(key="confirm_reset").click().run()
+    problems = []
+    if at.text_input(key="in_client_name").value != "":
+        problems.append("client name not cleared")
+    if at.number_input(key="in_weight_lbs").value != 180.0:
+        problems.append("weight not reset")
+    if at.radio(key="meals_per_day").value != 3:
+        problems.append("meals not reset")
+    if at.text_input(key="trainer_name").value != "Coach Sam":
+        problems.append("trainer name was cleared")
+    if at.text_input(key="trainer_email").value != "sam@example.com":
+        problems.append("trainer email was cleared")
+    if at.session_state["_uploader_nonce"] != 1:
+        problems.append("uploader not replaced")
+    return "; ".join(problems) or None
+
+
+def check_profile_loader() -> str | None:
+    from nutrition_core import ClientProfile
+    from profile_loader import sanitize_profile
+
+    good = ClientProfile(client_name="A B", age=41, gender="Female",
+                         primary_goal="Muscle Gain", fat_loss_type=None,
+                         goal_weight_lbs=190.0, meals_per_day=5, review_weeks=8,
+                         plan_date="2026-07-01").to_dict()
+    vals, notes = sanitize_profile(good)
+    expect_good = {k: v for k, v in good.items() if k != "plan_date"}
+    expect_good["fat_loss_type"] = "Moderate"
+    if vals != expect_good or notes:
+        return f"clean profile altered: {vals} {notes}"
+
+    old_file = {k: v for k, v in good.items()
+                if k not in ("meals_per_day", "review_weeks", "plan_date")}
+    vals, notes = sanitize_profile(old_file)
+    if notes or vals["meals_per_day"] != 3 or vals["review_weeks"] != 3:
+        return f"older profile without hand-off fields mishandled: {notes}"
+
+    bad = good | {"primary_goal": "Bulk", "weight_lbs": 900, "age": "old",
+                  "gender": None, "feet": 6.0, "meals_per_day": 7, "review_weeks": 4.0}
+    del bad["inches"]
+    vals, notes = sanitize_profile(bad)
+    expect = {"primary_goal": "Fat Loss", "weight_lbs": 500.0, "age": 30,
+              "gender": "Male", "feet": 6, "inches": 8, "meals_per_day": 3,
+              "review_weeks": 4}
+    wrong = {k: vals[k] for k in expect if vals[k] != expect[k]}
+    if wrong or len(notes) != 6:
+        return f"bad profile not sanitized: {wrong} notes={notes}"
+    if (type(vals["weight_lbs"]) is not float or type(vals["feet"]) is not int
+            or type(vals["review_weeks"]) is not int):
+        return "numeric types not coerced for widgets"
+
+    for junk in ([1, 2], {"foo": 1}, "text"):
+        try:
+            sanitize_profile(junk)
+            return f"accepted non-profile {junk!r}"
+        except ValueError:
+            pass
+    return None
+
+
+BEHAVIOR_CHECKS: list = [check_intensity_survives_goal_change, check_reset_keeps_trainer,
+                         check_profile_loader]
 
 
 def main() -> int:

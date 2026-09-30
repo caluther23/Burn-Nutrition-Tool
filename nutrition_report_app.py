@@ -24,6 +24,10 @@ from nutrition_core import (
     ClientProfile, build_plan, validate_profile,
 )
 from pdf_report import build_why_text, generate_pdf
+from profile_loader import (
+    AGE_RANGE, FEET_RANGE, INCHES_RANGE, MEALS_OPTIONS, REVIEW_WEEK_OPTIONS,
+    WEIGHT_RANGE, sanitize_profile,
+)
 
 APP_DIR = Path(__file__).resolve().parent
 LOGO_PATH = APP_DIR / "burn_boot_camp_logo.png"
@@ -248,22 +252,39 @@ def store_profile(profile: ClientProfile) -> None:
     st.session_state["profile_data"] = profile.to_dict()
 
 
-def clear_all() -> None:
-    for key in list(st.session_state.keys()):
-        del st.session_state[key]
+# The uploader's key includes a counter. Bumping it on reset gives a fresh,
+# empty uploader; otherwise the old file stays attached and gets reloaded.
+st.session_state.setdefault("_uploader_nonce", 0)
+LOAD_MESSAGE_KEYS = ("_load_ok", "_load_notes", "_load_error")
+
+# Cleared by Reset. Trainer/gym details, PDF content toggles and batch results
+# are kept: they carry across clients.
+CLIENT_STATE_KEYS = (*WIDGET_DEFAULTS, "pdf_bytes", "pdf_inputs", *LOAD_MESSAGE_KEYS)
 
 
-def apply_profile_to_widgets(profile: ClientProfile) -> None:
-    """Push a loaded profile into the live input widgets."""
-    for key, value in profile.to_dict().items():
-        if key == "fat_loss_type" and value is None:
-            value = "Moderate"
-        if key == "plan_date":
-            continue  # derived at render time; not a widget
-        if key in UNPREFIXED_FIELDS:
-            st.session_state[key] = value
-        else:
-            st.session_state[f"in_{key}"] = value
+def reset_client() -> None:
+    for key in CLIENT_STATE_KEYS:
+        st.session_state.pop(key, None)
+    st.session_state["_uploader_nonce"] += 1
+
+
+def load_uploaded_profile(uploader_key: str) -> None:
+    """on_change callback: runs before the script, so widget keys are writable."""
+    for key in LOAD_MESSAGE_KEYS:
+        st.session_state.pop(key, None)
+    uploaded = st.session_state.get(uploader_key)
+    if uploaded is None:   # file removed with the x
+        return
+    try:
+        values, notes = sanitize_profile(json.load(uploaded))
+    except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
+        st.session_state["_load_error"] = f"Could not read that file: {exc}"
+        return
+    for field, value in values.items():
+        st.session_state[field if field in UNPREFIXED_FIELDS else f"in_{field}"] = value
+    st.session_state.pop("pdf_bytes", None)
+    st.session_state["_load_ok"] = values["client_name"] or "client"
+    st.session_state["_load_notes"] = notes
 
 
 def card(text: str) -> None:
@@ -361,21 +382,17 @@ with st.sidebar:
 
     st.divider()
     st.markdown("### Load a Saved Client")
-    uploaded = st.file_uploader("Client profile (.json)", type=["json"],
-                                label_visibility="collapsed")
-    if uploaded is not None:
-        token = f"{uploaded.name}:{uploaded.size}"
-        if st.session_state.get("_loaded_token") != token:
-            try:
-                loaded = ClientProfile.from_dict(json.load(uploaded))
-                apply_profile_to_widgets(loaded)
-                st.session_state["_loaded_token"] = token
-                st.session_state["_loaded_name"] = loaded.client_name or "client"
-                st.rerun()
-            except (json.JSONDecodeError, TypeError, ValueError) as exc:
-                st.error(f"Could not read that file: {exc}")
-    if st.session_state.get("_loaded_name"):
-        st.success(f"Loaded {st.session_state['_loaded_name']}.")
+    uploader_key = f"profile_upload_{st.session_state['_uploader_nonce']}"
+    st.file_uploader("Client profile (.json)", type=["json"],
+                     label_visibility="collapsed", key=uploader_key,
+                     on_change=load_uploaded_profile, args=(uploader_key,))
+    if st.session_state.get("_load_error"):
+        st.error(st.session_state["_load_error"])
+    if st.session_state.get("_load_ok"):
+        st.success(f"Loaded {st.session_state['_load_ok']}.")
+    if st.session_state.get("_load_notes"):
+        st.warning("Some values were adjusted to fit the form:" + chr(10) * 2
+                   + chr(10).join(f"- {n}" for n in st.session_state["_load_notes"]))
 
     st.divider()
     st.caption(
@@ -413,19 +430,19 @@ st.text_input("Client Name (First & Last)", key="in_client_name",
 
 col1, col2 = st.columns(2)
 with col1:
-    st.number_input("Age", 16, 90, key="in_age", step=1)
+    st.number_input("Age", *AGE_RANGE, key="in_age", step=1)
     st.selectbox("Gender", GENDERS, key="in_gender")
     st.markdown("**Height**")
     h1, h2 = st.columns(2)
     with h1:
-        st.number_input("Feet", 4, 7, key="in_feet", step=1)
+        st.number_input("Feet", *FEET_RANGE, key="in_feet", step=1)
     with h2:
-        st.number_input("Inches", 0, 11, key="in_inches", step=1)
+        st.number_input("Inches", *INCHES_RANGE, key="in_inches", step=1)
 
 with col2:
-    st.number_input("Current Weight (lbs)", 80.0, 500.0, key="in_weight_lbs",
+    st.number_input("Current Weight (lbs)", *WEIGHT_RANGE, key="in_weight_lbs",
                     step=0.1, format="%.1f")
-    st.number_input("Goal Weight (lbs)", 80.0, 500.0, key="in_goal_weight_lbs",
+    st.number_input("Goal Weight (lbs)", *WEIGHT_RANGE, key="in_goal_weight_lbs",
                     step=0.1, format="%.1f")
     st.selectbox("Activity Level", ACTIVITY_OPTIONS, key="in_activity_level")
 
@@ -557,7 +574,7 @@ h2.metric("🌾 Fiber", f"{plan.fiber_g} g",
           help="About 14g per 1,000 calories — supports digestion and satiety.")
 
 # ---------- Per-meal reference ----------
-meals = st.radio("Meals per day", [3, 4, 5], horizontal=True,
+meals = st.radio("Meals per day", MEALS_OPTIONS, horizontal=True,
                  key="meals_per_day",
                  help="Splits the daily targets evenly as a starting reference.")
 if plan.has_valid_macros:
@@ -688,7 +705,7 @@ except (ValueError, TypeError):
     file_date = today
 
 review_weeks = st.select_slider(
-    "Check in again after", options=[0, 1, 2, 3, 4, 6, 8],
+    "Check in again after", options=REVIEW_WEEK_OPTIONS,
     key="review_weeks",
     format_func=lambda w: "No date" if w == 0 else ("1 week" if w == 1 else f"{w} weeks"),
     help="Sets the review date shown on the report. 'No date' omits it.",
@@ -775,6 +792,7 @@ st.iframe(
 st.caption("Tip: the PDF is the client-ready deliverable. Printing the page is handy "
            "for a quick paper copy of what's on screen.")
 
-if st.button("🗑️ Reset Form", type="secondary", width="stretch"):
-    clear_all()
-    st.rerun()
+with st.popover("🗑️ Reset Form", width="stretch"):
+    st.markdown("Clear all client fields? Trainer details and PDF settings are kept.")
+    st.button("Yes, reset", key="confirm_reset", type="primary", width="stretch",
+              on_click=reset_client)
